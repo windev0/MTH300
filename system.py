@@ -11,8 +11,7 @@ def matrice_diagonale(A, b):
         print("\n\t La solution est S = \n")
         print(sol)    
     except AssertionError:
-        print("\n\tERREUR: la matrice n'est pas carree ou la matrice b n'est pas un vecteur")
-        
+        print("\n\tERREUR: la matrice n'est pas carree ou la matrice b n'est pas un vecteur")    
 # ==================================================================================================
 def matrice_triangulaire_sup(A, b):
     try:
@@ -27,28 +26,41 @@ def matrice_triangulaire_sup(A, b):
         sol = np.zeros(shape=(n, 1))    # initialisation de la matrice vecteur solution
         sol[n-1] = b[n-1] / A[n-1, n-1]     # la solution z 
         # la remontée
-        for i in range(n-1):
+        for i in range(n-2, -1, -1):
+            sol[i] = b[i]
+            for j in range(i+1, n):
+                sol[i] -= A[i, j]*sol[j]
+            sol[i] /= A[i, i]
+            
+        print("\n\t La solution est S = \n")
+        print(sol) 
     except AssertionError:
         print("\n\tERREUR: la matrice n'est pas carree ou la matrice b n'est pas un vecteur")
-        
-        
-
-A = np.array([
-    [1, 0, 0],
-    [0, 5, 0],
-    [0, 0, 9]
-])
-# C = np.diag([1, 5, 9]) # pour la deckaration d'une matrice diagonale
-b = np.array([
-    [1],
-    [2],
-    [3]
-])
-matrice_diagonale(A, b)
-matrice_diagonale(C, b)
-
-
-
+# ==================================================================================================
+def matrice_triangulaire_inf(A, b):
+    try:
+        n, m, p = A.shape[0], A.shape[1], len(b)   # recueil du nb de lignes et de colonnes
+        assert n == m == p                 # verifier si la matrice est carree
+        # verifier si la matrice est triangulaire sup
+        try:
+            for i in range(n):
+                assert A[i+1, i] == 0
+        except Exception:
+            print("\n\tERREUR: Matrice non triangulaire inférieure !")
+        sol = np.zeros(shape=(n, 1))    # initialisation de la matrice vecteur solution
+        sol[0] = b[0] / A[0, 0]     # la solution x
+        # la decsente
+        for i in range(1, n):
+            sol[i] = b[i]
+            for j in range(i):
+                sol[i] -= A[i, j]*sol[j]
+            sol[i] /= A[i, i]
+            
+        print("\n\t La solution est S = \n")
+        print(sol) 
+    except AssertionError:
+        print("\n\tERREUR: la matrice n'est pas carree ou la matrice b n'est pas un vecteur")    
+# ==============================================================================================
 def Gauss_elimination(A, B):
     try:
         n = A.shape[0]                  # nb de lignes
@@ -76,7 +88,6 @@ def Gauss_elimination(A, B):
         print(np.linalg.solve(A, B))
     except AssertionError:
         print("\nLa matice n'est pas carrée !")
-
 # ==============================================================================================
 def Gauss_jordanV2(A, B):
     try:
@@ -106,9 +117,7 @@ def Gauss_jordanV2(A, B):
         print("\nLa matrice n'est pas carrée !")
         
     return B, A      # B est le vecteur solution X       
-    
 # ==============================================================================================
-
 def Gauss_jordan(A, B):
     A = np.array(A, int)
     B = np.array(B, int)
@@ -138,7 +147,6 @@ def Gauss_jordan(A, B):
             B[i] -= factor * B[k]
             
     return B, A
-
 # ==============================================================================================
 def jaccobi():
     pass
@@ -172,8 +180,7 @@ def decomposition_LU(A):
             
     except AssertionError:
         print("\nLa matrice A n'est pas carrée")
-    return L, U
-        
+    return L, U     
 # ----------------------------------------------------------------------------------------
 def calcul_Y_pour_LU(L, B):
     n = np.size(B)  # la taille du vecteur B
@@ -201,6 +208,21 @@ def methode_LU(A, B):
     X = vecteur_solution(U, Y)
     return L, U, Y, X
 # ==============================================================================================
+   
+
+A = np.array([
+    [1, 0, 0],
+    [0, 5, 0],
+    [0, 0, 9]
+])
+# C = np.diag([1, 5, 9]) # pour la deckaration d'une matrice diagonale
+b = np.array([
+    [1],
+    [2],
+    [3]
+])
+matrice_diagonale(A, b)
+# matrice_diagonale(C, b)
 
 
 # TEST
