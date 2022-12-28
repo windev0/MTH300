@@ -247,7 +247,7 @@ def main():
     print('\n')
     print('\n========================== E Q U A T I O N   D U  T Y P E   F ( X ) = 0 ==========================')
 
-    a = nbre_solutions(0, 8, 0.01)
+    a = nbre_solutions(0, 8, 0.01) # détermination du nombre de solutions
     if a > 0:
         print("\n Il existe {} solution (s)".format(a)) # affichage du nombre de solutions après balayage
         
@@ -300,7 +300,7 @@ def main():
 # dichotomie()
 # point_fixe()
 # newton()
-secante()
+# secante()
 """print(tronquer(3.99999999999998, 5))
 liste = ['', 1, 0, 1, '\n', 4, 5, 1, "\n", 8, 1, 2]
 print(*liste)
