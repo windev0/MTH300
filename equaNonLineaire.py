@@ -61,7 +61,7 @@ def convergence(x1, x2, e, nb, xm = 1):
         else:   # autre entier pour la convergence des methodes de points fixes, NEWTON
             return (fabs(x2-x1) / fabs(xm)) < e
     except ZeroDivisionError:
-        print("\n\tErreur: Division par zéro, essayer une autre valeurs")
+        print("\n\tErreur: Division par zéro, essayer une autre valeur car", xm, ' = 0')
     except TypeError or ValueError:
         print("\n\tErreur: donnée(s) invalide(s) !")
 #---------------------------------------------------------------------------------------------

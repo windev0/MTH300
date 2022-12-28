@@ -19,7 +19,7 @@ def matrice_triangulaire_sup(A, b):
         assert n == m == p                 # verifier si la matrice est carree
         # verifier si la matrice est triangulaire sup
         try:
-            for i in range(n):
+            for i in range(1,n+1):
                 assert A[i, i+1] == 0
         except Exception:
             print("\n\tERREUR: Matrice non triangulaire supérieure !")
@@ -211,8 +211,8 @@ def methode_LU(A, B):
    
 
 A = np.array([
-    [1, 0, 0],
-    [0, 5, 0],
+    [1, 5, 7],
+    [0, 5, 2],
     [0, 0, 9]
 ])
 # C = np.diag([1, 5, 9]) # pour la deckaration d'une matrice diagonale
@@ -221,9 +221,9 @@ b = np.array([
     [2],
     [3]
 ])
-matrice_diagonale(A, b)
+# matrice_diagonale(A, b)
 # matrice_diagonale(C, b)
-
+matrice_triangulaire_sup(A, b)
 
 # TEST
 """A = np.array([
