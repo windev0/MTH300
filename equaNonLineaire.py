@@ -33,7 +33,7 @@ def saisie_bornes():
 def saisie_X0():
     # cette fonction permet de saisir la valeur initiale
     try:
-        x0 = int(input("\n\tVeuillez saisir une valeur initiale: "))
+        x0 = float(input("\n\tVeuillez saisir une valeur initiale: "))
         return x0
     except ValueError or TypeError:
         print("\n\tErreur: Saisie invalide, choisir une autre valeur entière!")
@@ -72,6 +72,9 @@ f = lambda x : exp(-x) - x
     # return pow(x,2) - 2*x - 3
     # return pow(x,2) - 3*x + 2
 #---------------------------------------------------------------------------------------------
+g = lambda x : exp(-x) + x
+#---------------------------------------------------------------------------------------------
+
 devf = lambda x : -exp(-x) - 1
     # reperesente la fonction derivee 
 #---------------------------------------------------------------------------------------------
@@ -89,28 +92,36 @@ def secante():
         x0 = saisie_X0()
         x1 = saisie_X0()
         assert x0 < x1
-        e = saisie_tolerance()
-        N = int(input("\n\tVeuillez saisir le nombre total d'itération N = "))
-        x2 = x1 - ((f(x1)*(x1-x0))/(f(x1)-f(x0)))  # initialisation de x2
-        i = 0
-        while not(convergence(x1, x2, e, 2, x2)) and i < N - 1:
-            # mise a jour des valeurs 
-            x0 = x1
-            x1 = x2
-            x2 = x1 - ((f(x1)*(x1-x0))/(f(x1)-f(x0)))
-            i += 1
-        # Saisie des résultats
-        print('\n-----------------------------------------------')
-        if convergence(x1, x2, e, 2, x2):
-            print("\tconvergence atteinte")
-        if i == N-1 and (not convergence(x1, x2, e, 2, x2)):
-            print("\tConvergence non atteinte en {} itérations".format(i+1))
-        print("\tla solution est: Xn+1 = {}".format(x2))
-        print('-----------------------------------------------')
-    except TypeError:
+        
+        if f(x0) == 0:
+            print("\tla solution est: X* = {}".format(x0))
+        elif f(x1) == 0:
+            print("\tla solution est: X* = {}".format(x1))
+        else:
+            e = saisie_tolerance()
+            N = int(input("\n\tVeuillez saisir le nombre total d'itération N = "))
+            x2 = x1 - ((f(x1)*(x1-x0))/(f(x1)-f(x0)))  # initialisation de x2
+            i = 1
+            while not(convergence(x1, x2, e, 2, x2)) and i < N:
+                # mise a jour des valeurs 
+                x0 = x1
+                x1 = x2
+                x2 = x1 - ((f(x1)*(x1-x0))/(f(x1)-f(x0)))
+                i += 1
+            # Saisie des résultats
+            print('\n-----------------------------------------------')
+            if convergence(x1, x2, e, 2, x2):
+                print("\tconvergence atteinte en ", i, 'itérations')
+            if i == N and (not convergence(x1, x2, e, 2, x2)):
+                print("\tConvergence non atteinte en {} itérations".format(i))
+            print("\tla solution est: X* = {}".format(x2))
+            print('-----------------------------------------------')
+    except TypeError or ValueError or NameError:
         print("\n\tUne ou plusieurs donnée(s) entrée(s) est (sont) non valide(s)")
     except AssertionError:
         print("\n\tErreur: La premiere valeur initiale doit etre inférieure à la seconde!")
+    except ZeroDivisionError:
+        print("\n\tErreur: Division par zéro, car f(", x1, ') - f(', x0, ') = 0; essayez avec d\'autres valeurs')
 
 #---------------------------------------------------------------------------------------------
 
@@ -120,48 +131,60 @@ def newton():
         N = int(input("\n\tVeuillez saisir le nombre total d'itération N = "))
         x0 = saisie_X0()
         x1 = x0 - (f(x0) / devf(x0)) # initialisation de x1
-        i = 0
-        while not(convergence(x0, x1, e, 2, x1)) and i < N - 1:
-            # mise a jour des valeurs 
-            x0 = x1
-            x1 = x0 - (f(x0) / devf(x0))
-            i += 1
-        # Saisie des résultats
-        print('\n-----------------------------------------------')
-        if convergence(x0, x1, e, 2, x1):
-            print("\tconvergence atteinte")
-        if i == N-1 and (not convergence(x0, x1, e, 2, x1)):
-            print("\tConvergence non atteinte en {} itérations".format(i+1))
-        print("\tla solution est: Xn+1 = {}".format(x1))
-        print('-----------------------------------------------')
-    except TypeError or ValueError:
+        
+        if f(x0) == 0:
+                print("\tla solution est: X* = {}".format(x0))
+        elif f(x1) == 0:
+            print("\tla solution est: X* = {}".format(x1))
+        else:
+            i = 1
+            while not(convergence(x0, x1, e, 2, x1)) and i < N:
+                # mise a jour des valeurs 
+                x0 = x1
+                x1 = x0 - (f(x0) / devf(x0))
+                i += 1
+            # Saisie des résultats
+            print('\n-----------------------------------------------')
+            if convergence(x0, x1, e, 2, x1):
+                print("\tconvergence atteinte en ", i, 'itérations')
+            if i == N and (not convergence(x0, x1, e, 2, x1)):
+                print("\tConvergence non atteinte en {} itérations".format(i))
+            print("\tla solution est: X* = {}".format(x1))
+            print('-----------------------------------------------')
+            
+    except TypeError or ValueError and NameError:
         print("\n\tErreur: Une ou plusieurs donnée(s) entrée(s) est (sont) non valide(s)")
     except ZeroDivisionError:
-        print("\n\tErreur: Division par zéro, essayer avec d'autres valeurs !")
+        print("\n\tErreur: Division par zéro, car f'(", x0, ') = 0', "essayer avec d'autres valeurs !")
 
 # -----------------------------------------------------------------------------------------------------------------------------------------
 
 def point_fixe():
     try:
         x0 = saisie_X0()
-        x1 = f(x0)  # initialisation de x1
+        x1 = g(x0)  # initialisation de x1
         e = saisie_tolerance()
-        # N = calcul_N(x0, x1, e)
         N = int(input("\n\tVeuillez saisir le nombre total d'itération N = "))
-        i = 0
-        while not(convergence(x0, x1, e, 2, x1)) and i < N - 1:
-            # mise a jour des valeurs 
-            x0 = x1
-            x1 = f(x0)
-            i += 1
-        # Saisie des résultats
-        print('\n-----------------------------------------------')
-        if convergence(x0, x1, e, 2, x1):
-            print("\tconvergence atteinte")
-        if i == N-1 and (not convergence(x0, x1, e, 2, x1)):
-            print("\tConvergence non atteinte en {} itérations".format(i+1))
-        print("\tla solution est: Xn+1 = {}".format(x1))
-        print('-----------------------------------------------')
+
+        if f(x0) == 0:
+            print("\tla solution est: X* = {}".format(x0))
+        elif f(x1) == 0:
+            print("\tla solution est: X* = {}".format(x1))
+        else:
+            i = 1
+            while not(convergence(x0, x1, e, 2, x1)) and i < N:
+                # mise a jour des valeurs 
+                x0 = x1
+                x1 = f(x0)
+                i += 1
+            # Saisie des résultats
+            print('\n-----------------------------------------------')
+            if convergence(x0, x1, e, 2, x1):
+                print("\tconvergence atteinte en", i, 'itérations')
+            if i == N-1 and (not convergence(x0, x1, e, 2, x1)):
+                print("\tConvergence non atteinte en {} itérations".format(i))
+            print("\tla solution est: X* = {}".format(x1))
+            print('-----------------------------------------------')
         
     except TypeError or ValueError:
         print("\n\tUne ou plusieurs donnée(s) entrée(s) est (sont) non valide(s)")    
@@ -174,45 +197,45 @@ def point_fixe():
 def dichotomie():
     try:
         x1, x2 = saisie_bornes()    # saisie des bornes de l'intervale
-        if f(x1)*f(x2) < 0:         # la fonction change de signe sur l'intervalle donné
-            print("\n\tLa fonction est monotone sur l'intervalle [{},{}]".format(x1, x2))
-            print("\ton a {} solution(s)".format(nbre_solutions(x1, x2, 0.01))) # affichage du nombre de solutions trouvées
-            xm = (x1 + x2 )/2           # initialisation du milieu de l'intervalle
-            if f(xm) == 0:              # xm est la racine cherchee
-                print("\n\t X1 = {}\t\t\t X2 = {}\t\t\t Xm = {}\n f(X1) = {}\t\t f(X2) = {}\t\t f(Xm) = {}".format(x1, x2, xm, f(x1), f(x2), f(xm)))
-            else:
-                e = saisie_tolerance()   # saisie du critère d'arret et le nb max d'itération
-                N = calcul_N(x1, x2, e)  # calcul du nb max d'iteration a l'aide de la tolerance
-                i = 0
-                while (not (convergence(x1, x2, e, 1, xm))) and i < N-1 and f(x1)*f(x2) < 0:
-                    if f(x1)*f(xm) < 0:
-                        x2 = xm             # changement de la borne supérieure
-                    if f(xm)*f(x2) < 0:
-                        x1 = xm             # changement de la borne inférieure
-                    xm = (x1 + x2 )/2       # mise à jour du milieu de l'intervalle
-                    i += 1                  # incrémentation du nb d'itérations
-                print('\n-------------------------------------------------------------------------------------------')
-                if i == N-1 and (not convergence(x1, x2, e, 1, xm)):    # nb d'itération atteinte
-                    print("\tConvergence non atteinte en {} itérations".format(i+1))
-                if convergence(x1, x2, e, 1, xm):           # si la convergence est atteinte, alors...
-                    print("\tConvergence atteinte")
-                # Saisie des résultats
-                print("\n\t X1 = {}\t\t\t X2 = {}\t\t\t Xm = {}\n\t f(X1) = {}\t\t f(X2) = {}\t\t f(Xm) = {}".format(\
-                tronquer(x1, 6), tronquer(x2, 6), tronquer(xm, 6), tronquer(f(x1), 6), tronquer(f(x2), 6), tronquer(f(xm), 6)))
-            print('-------------------------------------------------------------------------------------------')
-        elif f(x1) == 0:
+        if f(x1) == 0:
             print('\n-------------------------------------------------------------------------------------------')
             print("\tLa solution est x =", x1)
             print('-------------------------------------------------------------------------------------------')
-            
         elif f(x2) == 0:
             print('\n-------------------------------------------------------------------------------------------')
             print("\tLa solution est x =", x2)
             print('-------------------------------------------------------------------------------------------')
         else:
-            print("\n\tla fonction ne change pas de signe sur l'intervalle [{},{}]".format(x1, x2))
+            if f(x1)*f(x2) < 0:         # la fonction change de signe sur l'intervalle donné
+                print("\n\tLa fonction est monotone sur l'intervalle [{},{}]".format(x1, x2))
+                print("\ton a {} solution(s)".format(nbre_solutions(x1, x2, 0.01))) # affichage du nombre de solutions trouvées
+                xm = (x1 + x2 )/2           # initialisation du milieu de l'intervalle
+                if f(xm) == 0:              # xm est la racine cherchee
+                    print("\n\t X1 = {}\t\t\t X2 = {}\t\t\t Xm = {}\n f(X1) = {}\t\t f(X2) = {}\t\t f(Xm) = {}".format(x1, x2, xm, f(x1), f(x2), f(xm)))
+                else:
+                    e = saisie_tolerance()   # saisie du critère d'arret et le nb max d'itération
+                    N = calcul_N(x1, x2, e)  # calcul du nb max d'iteration a l'aide de la tolerance
+                    i = 1
+                    while (not (convergence(x1, x2, e, 1, xm))) and i < N and f(x1)*f(x2) < 0:
+                        if f(x1)*f(xm) < 0:
+                            x2 = xm             # changement de la borne supérieure
+                        if f(xm)*f(x2) < 0:
+                            x1 = xm             # changement de la borne inférieure
+                        xm = (x1 + x2 )/2       # mise à jour du milieu de l'intervalle
+                        i += 1                  # incrémentation du nb d'itérations
+                    print('\n-------------------------------------------------------------------------------------------')
+                    if i == N and (not convergence(x1, x2, e, 1, xm)):    # nb d'itération atteinte
+                        print("\tConvergence non atteinte en {} itérations".format(i))
+                    if convergence(x1, x2, e, 1, xm):           # si la convergence est atteinte, alors...
+                        print("\tConvergence atteinte en", i, 'itérations')
+                    # Saisie des résultats
+                    print("\n\t X1 = {}\t\t\t X2 = {}\t\t\t Xm = {}\n\t f(X1) = {}\t\t f(X2) = {}\t\t f(Xm) = {}".format(\
+                    tronquer(x1, 6), tronquer(x2, 6), tronquer(xm, 6), tronquer(f(x1), 6), tronquer(f(x2), 6), tronquer(f(xm), 6)))
+                print('-------------------------------------------------------------------------------------------')
+            else:
+                print("\n\tla fonction ne change pas de signe sur l'intervalle [{},{}]".format(x1, x2))
 
-    except TypeError or ValueError:
+    except TypeError or ValueError or NameError:
         print("\n\tErreur: une ou plusieurs donnée(s) entrée(s) est (sont) non valide(s) !")
     except ZeroDivisionError:
         print("\n\tErreur: Division par zéro, essayer avec d'autres valeurs !")
@@ -277,7 +300,7 @@ def main():
 # dichotomie()
 # point_fixe()
 # newton()
-# secante()
+secante()
 """print(tronquer(3.99999999999998, 5))
 liste = ['', 1, 0, 1, '\n', 4, 5, 1, "\n", 8, 1, 2]
 print(*liste)
