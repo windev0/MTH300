@@ -1,4 +1,5 @@
 import numpy as np
+from numpy.linalg import norm, inv, inf
 from equaNonLineaire import effacer_console
 
 def matrice_diagonale(A, b):
@@ -148,8 +149,16 @@ def Gauss_jordan(A, B):
             
     return B, A
 # ==============================================================================================
-def jaccobi():
-    pass
+def jaccobi(f, J, z0, Eps):
+    iJ = lambda z: inv(J(z))
+    z = z0 - iJ(z0)@f(z0)
+    Iterations = 1
+    while norm(z-z0, inf) >= Eps:
+        z0 = z
+        z = z0 - iJ(z0)@f(z0)
+        Iterations += 1
+    return z, Iterations
+
 # ==============================================================================================
 def decomposition_LU(A):
     try:
@@ -248,7 +257,8 @@ B = np.array([8, 6, 2, 0])
 # Gauss_elimination(A, B) # appel de la fonction pivot
 # X, A = Gauss_jordan(A, B)
 # X, A = Gauss_jordanV2(A, B)
-L, U, Y, X = methode_LU(A, B)
+# L, U, Y, X = methode_LU(A, B)
+x, n = jaccobi()
 
 
 # print("cc\n", A[0:3, 1:3])
