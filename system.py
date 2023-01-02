@@ -1,18 +1,30 @@
 import numpy as np
-from numpy.linalg import norm, inv, inf
+# from numpy.linalg import norm, inv, inf
 from equaNonLineaire import effacer_console
 
 def matrice_diagonale(A, b):
-    try:
-        n, m, p = A.shape[0], A.shape[1], len(b)   # recueil du nb de lignes et de colonnes
-        assert n == m == p                 # verifier si la matrice est carree
-        sol = np.zeros(shape=(n, 1))
+    try:  
+        n, m, p = A.shape[0], A.shape[1], len(b)     # recueil du nb de lignes et de colonnes
+        assert n == m == p                           # verifier si la matrice est carree
+        for i in range(n):                           # on s'assure de A est diagonale
+            for j in range(n):
+                if (i == j) and A[i, j] == 0 :       # si la diagonale contient 0
+                    raise PermissionError
+                if (i != j) and A[i, j] != 0:        # si les autres éléments sont non nuls
+                    raise PermissionError
+                               
+        sol = np.zeros(shape=(n, 1))                 # matrice de n ligne, 1 colonnes initialisé à 0
         for i in range(n):
-            sol[i] = b[i] / A[i, i]
+            sol[i] = b[i] / A[i, i]                  # les éléments de la matrice solution
         print("\n\t La solution est S = \n")
-        print(sol)    
+        # print(sol) 
+        return sol                                   # renvoie de la solution                 
     except AssertionError:
-        print("\n\tERREUR: la matrice n'est pas carree ou la matrice b n'est pas un vecteur")    
+        print("\n\tERREUR: la matrice n'est pas carree ou la matrice b n'est pas un vecteur") 
+    except TypeError or ValueError or NameError:
+        print("\n\tUne ou plusieurs donnée(s) entrée(s) est (sont) non valide(s)")   
+    except PermissionError:
+        print("\n\tERREUR: Matrice non diagonale")
 # ==================================================================================================
 def matrice_triangulaire_sup(A, b):
     try:
@@ -37,6 +49,8 @@ def matrice_triangulaire_sup(A, b):
         print(sol) 
     except AssertionError:
         print("\n\tERREUR: la matrice n'est pas carree ou la matrice b n'est pas un vecteur")
+    except TypeError or ValueError or NameError:
+        print("\n\tUne ou plusieurs donnée(s) entrée(s) est (sont) non valide(s)")
 # ==================================================================================================
 def matrice_triangulaire_inf(A, b):
     try:
@@ -60,7 +74,9 @@ def matrice_triangulaire_inf(A, b):
         print("\n\t La solution est S = \n")
         print(sol) 
     except AssertionError:
-        print("\n\tERREUR: la matrice n'est pas carree ou la matrice b n'est pas un vecteur")    
+        print("\n\tERREUR: la matrice n'est pas carree ou pas triangulaire inférieure ou la matrice b n'est pas un vecteur")  
+    except TypeError or ValueError or NameError:
+        print("\n\tUne ou plusieurs donnée(s) entrée(s) est (sont) non valide(s)")  
 # ==============================================================================================
 def Gauss_elimination(A, B):
     try:
@@ -220,8 +236,8 @@ def methode_LU(A, B):
    
 
 A = np.array([
-    [1, 5, 7],
-    [0, 5, 2],
+    [1, 0, 0],
+    [0, 4, 0],
     [0, 0, 9]
 ])
 # C = np.diag([1, 5, 9]) # pour la deckaration d'une matrice diagonale
@@ -230,9 +246,11 @@ b = np.array([
     [2],
     [3]
 ])
+D = matrice_diagonale(A, b)
+print(D)
 # matrice_diagonale(A, b)
 # matrice_diagonale(C, b)
-matrice_triangulaire_sup(A, b)
+# matrice_triangulaire_sup(A, b)
 
 # TEST
 """A = np.array([
@@ -245,20 +263,21 @@ matrice_triangulaire_sup(A, b)
 B = np.array([8, 6, -2, 0])
 print(B)"""
 
-A = np.array([
+"""A = np.array([
     [1, 3, 1, 1],
     [2, -1, 0, 2],
     [5, 0, 3, -3],
     [0, 1, 4, 2]
 ])
 
-B = np.array([8, 6, 2, 0])
+B = np.array([8, 6, 2, 0])"""
+
 
 # Gauss_elimination(A, B) # appel de la fonction pivot
 # X, A = Gauss_jordan(A, B)
 # X, A = Gauss_jordanV2(A, B)
 # L, U, Y, X = methode_LU(A, B)
-x, n = jaccobi()
+# x, n = jaccobi()
 
 
 # print("cc\n", A[0:3, 1:3])
@@ -281,55 +300,55 @@ x, n = jaccobi()
 # effacer_console() # on rend au propre la console
 
 # Test des différentes méthodes
-print('\n')
-print('\n========================== E Q U A T I O N   D U  T Y P E   A * X  =  B ==========================')
+# print('\n')
+# print('\n========================== E Q U A T I O N   D U  T Y P E   A * X  =  B ==========================')
 
-if 1 == 1:
+# if 1 == 1:
     
-    continuer = 'o' # variable servant de condition de continuation
-    while continuer == 'o':
+#     continuer = 'o' # variable servant de condition de continuation
+#     while continuer == 'o':
         
-        # affichage du menu
-        print("\n\t M E N U ")
+#         # affichage du menu
+#         print("\n\t M E N U ")
         
-        print("\n\t 1- ELIMINATION DE GAUSS ")
-        print("\n\t 2- GAUSS JORDAN ")
-        print("\n\t 3- LU - CROUT ")
-        print("\n\t 4- LU - CROUT ")
-        try:
-            choix = int(input("\nFaire un choix entre {1} {2} {3} {4}: "))
-            if choix in [1, 2, 3, 4]:
-                # appel aux procedures des methodes
-                if choix == 1:
-                    print("\n\t================ M E T H O D E ================")
-                    # appel fonction
-                elif choix == 2:
-                    print("\n\t================ M E T H O D E ================")
-                    # appel fonction
-                elif choix == 2:
-                    print("\n\t================ M E T H O D E ================")
-                    # appel fonction
-                elif choix == 3:
-                    print("\n\t================ M E T H O D E ================")
-                    # appel fonction
-                elif choix == 4:
-                    print("\n\t================ M E T H O D E ================")
-                    # appel fonction
-                else:
-                    pass
-            else:
-                raise PermissionError
+#         print("\n\t 1- ELIMINATION DE GAUSS ")
+#         print("\n\t 2- GAUSS JORDAN ")
+#         print("\n\t 3- LU - CROUT ")
+#         print("\n\t 4- LU - CROUT ")
+#         try:
+#             choix = int(input("\nFaire un choix entre {1} {2} {3} {4}: "))
+#             if choix in [1, 2, 3, 4]:
+#                 # appel aux procedures des methodes
+#                 if choix == 1:
+#                     print("\n\t================ M E T H O D E ================")
+#                     # appel fonction
+#                 elif choix == 2:
+#                     print("\n\t================ M E T H O D E ================")
+#                     # appel fonction
+#                 elif choix == 2:
+#                     print("\n\t================ M E T H O D E ================")
+#                     # appel fonction
+#                 elif choix == 3:
+#                     print("\n\t================ M E T H O D E ================")
+#                     # appel fonction
+#                 elif choix == 4:
+#                     print("\n\t================ M E T H O D E ================")
+#                     # appel fonction
+#                 else:
+#                     pass
+#             else:
+#                 raise PermissionError
     
-            continuer = str.lower(input("\nVoulez vous continuer (o/n)? ")) # forcer la valeur du choix a etre en minuscule
-            if continuer != 'n' and continuer != 'o':
-                print("\n\tErreur: Saisie invalide ")
+#             continuer = str.lower(input("\nVoulez vous continuer (o/n)? ")) # forcer la valeur du choix a etre en minuscule
+#             if continuer != 'n' and continuer != 'o':
+#                 print("\n\tErreur: Saisie invalide ")
             
-        except PermissionError:
-            print("\nChoix invalide !")
+#         except PermissionError:
+#             print("\nChoix invalide !")
             
-        effacer_console() # on rend au propre la console
+#         effacer_console() # on rend au propre la console
 
-else:
-    print("\nAucune solution pour cette équation !")
+# else:
+#     print("\nAucune solution pour cette équation !")
 
-print('\n')
+# print('\n')
