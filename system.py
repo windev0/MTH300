@@ -284,70 +284,151 @@ def cholesky(A, b):
     except PermissionError:
         print("\n\tERREUR: Matrice non définie positive")
 # ===========================================================================================
-A = np.array([
-    [4, 1, 1],
-    [1, 5, 2],
-    [1, 2, 6]
-])
-b = np.array([7,-21,15])
-L, transposedL, Y, X2 = crout(A, b)
-print(L)
-print(transposedL)
-print(Y)
-print(X2)
+def jacobi(A, b, nmax = 100, tol = 1e-5):
+    try:
+        # verifier si la matrice A est carrée
+        m, n, p = np.shape(A)[0], np.shape(A)[1], len(b)   # respectivemnt nb de lignes et de colonnes
+        assert m == n == p
+        
+        D = np.diag(np.diag(A))      # D est la diagonale de A
+        E = -np.tril(A,-1)
+        F = - np.triu(A, 1)
+        
+        x = np.zeros((n), 'float')
+        cpt = 0
+        # critere d'arret : ||AX-b|| ~~ 0
+        while cpt < nmax and np.max(abs(np.matmul(A,x)-b)) > tol:
+            x = np.dot(np.linalg.inv(D), np.dot(E+F, x) + b )
+            cpt += 1
+        if cpt < nmax:
+            print("\n\tConvergence atteinte")
+        else:
+            print("\n\tNombre maximal d'itérations atteinte")
+        return x
+            
+    except AssertionError:
+        print("\nLa matrice A n'est pas carrée ou b n'est pas une matrice colonne")
+    except ZeroDivisionError:
+        print("\n\tERREUR: Division par zéro")
+    except Exception:
+        print("\n\tERREUR: Une erreur s'est produite, réessayez avec d'autres données !")
+# ===========================================================================================
+def gauss_seidel(A, b, x = [0, 0, 0], max_iter=100, tol=1e-5):
+    n = len(A)
+    cpt = 0
+    while cpt < max_iter:
+        x_new = x.copy()
+        for j in range(n):
+            s1 = sum(A[j][k] * x_new[k] for k in range(j))
+            s2 = sum(A[j][k] * x[k] for k in range(j+1, n))
+            x_new[j] = (b[j] - s1 - s2) / A[j][j]
+        if all(abs(x_new[i] - x[i]) < tol for i in range(n)):
+            return x_new
+        x = x_new
+    return x
 
-# effacer_console() # on rend au propre la console
+
+
+# print(jacobi(A,b, 100, 1.e-7))
+# print(gauss_seidel(A,b,[0,0,0]))
+# print(Gauss_elimination(A,b))
+
+# L, transposedL, Y, X2 = crout(A, b)
+# print(L)
+# print(transposedL)
+# print(Y)
+# print(X2)
+
+effacer_console() # on rend au propre la console
 
 # Test des différentes méthodes
-# print('\n')
-# print('\n========================== E Q U A T I O N   D U  T Y P E   A * X  =  B ==========================')
+print('\n')
+print('\n========================== E Q U A T I O N   D U  T Y P E   A * X  =  B ==========================')
 
-# if 1 == 1:
+A = np.array([[4, 1, 1],[1, 5, 2],[1, 2, 6]])
+b = np.array([7,-21,15])
+
+continuer = 'o' # variable servant de condition de continuation
+valide = True
+while continuer == 'o':
     
-#     continuer = 'o' # variable servant de condition de continuation
-#     while continuer == 'o':
-        
-#         # affichage du menu
-#         print("\n\t M E N U ")
-        
-#         print("\n\t 1- ELIMINATION DE GAUSS ")
-#         print("\n\t 2- GAUSS JORDAN ")
-#         print("\n\t 3- LU - CROUT ")
-#         print("\n\t 4- LU - CROUT ")
-#         try:
-#             choix = int(input("\nFaire un choix entre {1} {2} {3} {4}: "))
-#             if choix in [1, 2, 3, 4]:
-#                 # appel aux procedures des methodes
-#                 if choix == 1:
-#                     print("\n\t================ M E T H O D E ================")
-#                     # appel fonction
-#                 elif choix == 2:
-#                     print("\n\t================ M E T H O D E ================")
-#                     # appel fonction
-#                 elif choix == 2:
-#                     print("\n\t================ M E T H O D E ================")
-#                     # appel fonction
-#                 elif choix == 3:
-#                     print("\n\t================ M E T H O D E ================")
-#                     # appel fonction
-#                 elif choix == 4:
-#                     print("\n\t================ M E T H O D E ================")
-#                     # appel fonction
-#                 else:
-#                     pass
-#             else:
-#                 raise PermissionError
+    A = np.array([[4, 1, 1],[1, 5, 2],[1, 2, 6]])
+    b = np.array([7,-21,15])
     
-#             continuer = str.lower(input("\nVoulez vous continuer (o/n)? ")) # forcer la valeur du choix a etre en minuscule
-#             if continuer != 'n' and continuer != 'o':
-#                 print("\n\tErreur: Saisie invalide ")
-            
-#         except PermissionError:
-#             print("\nChoix invalide !")
-            
-#         effacer_console() # on rend au propre la console
+    # affichage du menu
+    print("\n\t M E N U ")
 
-# else:
-#     print("\nAucune solution pour cette équation !")
+    print("\n\t 1- ELIMINATION DE GAUSS ")
+    print("\n\t 2- GAUSS JORDAN ")
+    print("\n\t 3- LU - DOOLITE ")
+    print("\n\t 4- LU - CROUT ")
+    print("\n\t 5- LU - CHOLESKY ")
+    print("\n\t 6- JACOBI ")
+    print("\n\t 7- GAUSS - SEIDEL ")
+        
+    try:
+        choix = int(input("\nFaire un choix entre {1} {2} {3} {4} {5} {6} {7}: "))
+        if choix in [1, 2, 3, 4, 5, 6, 7]:
+            # appel aux procedures des methodes
+            if choix == 1:
+                print("\n\t================ M E T H O D E   D E   G A U S S ================")
+                print("\nX = \n", Gauss_elimination(A, b))
+            elif choix == 2:
+                print("\n\t================ M E T H O D E   D E   G A U S S - J O R D A N ================")
+                x, newA = Gauss_jordan(A,b)
+                print("\nA = \n", newA)
+                print("\nX = \n", x)
+            elif choix == 3:
+                print("\n\t================ M E T H O D E   L U   ( D O O L I T E ) ================")
+                L, U, y, x = doolittle(A, b)
+                print("\nL = \n", L)
+                print("\nU = \n", U)
+                print("\nY = \n", y)
+                print("\nX = \n", x)
+            elif choix == 4:
+                print("\n\t================ M E T H O D E   L U   ( C R O U T ) ================")
+                L, U, y, x = crout(A, b)
+                print("\nL = \n", L)
+                print("\nU = \n", U)
+                print("\nY = \n", y)
+                print("\nX = \n", x)
+            elif choix == 5:
+                print("\n\t================ M E T H O D E   L U   ( C H O L E S K Y ) ================")
+                L, transposedL, y, x = cholesky(A, b)
+                print("\nL = \n", L)
+                print("\ntranspL = \n", transposedL)
+                print("\nY = \n", y)
+                print("\nX = \n", x)
+            elif choix == 6:
+                print("\n\t================ M E T H O D E    D E   J A C O B I  ================")
+                print("\nX = \n", jacobi(A, b))
+            elif choix == 7:
+                print("\n\t================ M E T H O D E    D E   G A U S S - S E I D E L  ================")
+                print("\nX = \n", gauss_seidel(A, b))
+            else:
+                pass
+        else:
+            raise PermissionError
+        
+        continuer = str.lower(input("\nVoulez vous continuer (o/n)? ")) # forcer la valeur du choix a etre en minuscule
+        if continuer != 'n' and continuer != 'o':
+            valide = False
+            print("\n\tErreur: Saisie invalide ")
+        else:
+            valide = True
+        while valide == False:        
+            continuer = str.lower(input("\nVoulez vous continuer (o/n)? ")) # forcer la valeur du choix a etre en minuscule
 
-# print('\n')
+            if continuer != 'n' and continuer != 'o':
+                valide = False
+                print("\n\tErreur: Saisie invalide ")
+            else:
+                valide = True
+            
+    except PermissionError:
+        print("\nChoix invalide !")
+    except ValueError:
+        print("\n\tERREUR: Saisie invalide !")
+            
+        # effacer_console() # on rend au propre la console
+print('\n')
