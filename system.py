@@ -296,30 +296,6 @@ print(transposedL)
 print(Y)
 print(X2)
 
-
-# Gauss_elimination(A, B) # appel de la fonction pivot
-# X, A = Gauss_jordan(A, B)
-# X, A = Gauss_jordanV2(A, B)
-# x, n = jaccobi()
-
-
-# print("cc\n", A[0:3, 1:3])
-# for i in range(4):
-    # print(A[i][i])
-# print(np.shape(A)[0], np.shape(A)[1])
-# A, B = B, A
-# print(np.shape(A)[0])
-# print('---------')
-
-# print('================================')
-# print("L = \n\n", L)
-# print('================================')
-# print("U = \n\n", U)
-# print('================================')
-# print("Y = \n\n", Y)
-# print('================================')
-# print("X = \n\n", X)
-
 # effacer_console() # on rend au propre la console
 
 # Test des différentes méthodes
