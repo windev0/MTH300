@@ -1,4 +1,5 @@
 import numpy as np
+from math import sqrt
 # from numpy.linalg import norm, inv, inf
 from equaNonLineaire import effacer_console
 
@@ -178,136 +179,122 @@ def Gauss_jordan(A, B):
             
     return B, A
 # ==============================================================================================
-
-# ==============================================================================================
-def decomposition_LU(A, m = 1):
-    try:
-         # verifier si la matrice A est carrée
-        m, n = np.shape(A)[0], np.shape(A)[1]   # respectivemnt nb de lignes et de colonnes
-        assert m == n
-        
-        L = np.zeros(shape = (n, n))  # initilaisation de L
-        U = np.zeros(shape = (n, n))  # initilaisation de U
-        
-        if m == 1:          # pour Doolite
-            for i in range(n):
-                # calcul des élément de la matrice L
-                for j in range(i-1):
-                    L[i, j] = A[i, j]
-                    for k in range(j-1):
-                        L[i, j] = L[i, j] - L[i, k] * U[k, j]
-                    L[i, j] = L[i, j] - U[j, j]
-                    
-                # calcul des élément de la matrice U
-                for j in range(i, n):
-                    U[i, j] = A[i, j]
-                    for k in range(i-1):
-                        U[i, j] = U[i, j] - L[i, k] * U[k, j]
-                
-            for i in range(n):
-                # rendre la diagonle de L à 1
-                L[i, i] = 1
-        elif m == 2:        # pour crout
-            pass
-        else:               # pour cholesky
-            pass
-            
-    except AssertionError:
-        print("\nLa matrice A n'est pas carrée")
-    except ZeroDivisionError:
-        print("\n\tERREUR: Division par zéro")
-    except Exception:
-        print("\n\tERREUR: Une erreur s'est produite, réessayez avec d'autres données !")
-    return L, U     
-# ----------------------------------------------------------------------------------------
 def calcul_Y_pour_LU(L, B):
-    # n = np.size(B)  # la taille du vecteur B
-    # Y = np.zeros(shape = (n, 1))        # initialisation de y
-    # for i in range(n):
-    #     Y[i] = B[i]
-    #     for k in range(i-1):
-    #         Y[i] = Y[i] - L[i, k] * Y[k]
-    
     Y = matrice_triangulaire_inf(L, B) # appel à procedure pour la remontée
     return Y            # renvoie de la valeur de y calculé
 # ----------------------------------------------------------------------------------------
 def vecteur_solution(U, Y): # permet de déterminer le x à partir du y
-    # n = np.size(Y)          # recueil de la taille de y
-    # X = np.zeros(shape = (n, 1))    # initialisation du vecteur x à n
-    # i = n-1
-    # X[i] = Y[i]     
-    # for k in range(i+1, n):
-    #     X[i] = X[i] - U[i, k] * X[k]
-        
-    # X[i] = X[i] / U[i, i]
     X = matrice_triangulaire_sup(U, Y) # appel à procedure pour la descente
     return X
-# ----------------------------------------------------------------------------------------
-def methode_LU_Doolite(A, B):
-    L, U = decomposition_LU(A, 1)
-    Y = calcul_Y_pour_LU(L, B)
-    X = vecteur_solution(U, Y)
-    return L, U, Y, X
 # ==============================================================================================
-def methode_LU_Crout(A, B):
-    L, U = decomposition_LU(A, 2)
-    Y = calcul_Y_pour_LU(L, B)
-    X = vecteur_solution(U, Y)
-    return L, U, Y, X
-# ==============================================================================================
-def methode_LU_Cholesky(A, B):
-    L, U = decomposition_LU(A)
-    Y = calcul_Y_pour_LU(L, B)
-    X = vecteur_solution(U, Y)
-    return L, U, Y, X
-# ==============================================================================================
-
-
+def doolittle(A, B):
+    try:
+         # verifier si la matrice A est carrée
+        m, n, p = np.shape(A)[0], np.shape(A)[1], len(B)   # respectivemnt nb de lignes et de colonnes
+        assert m == n == p
+        
+        L = np.zeros(shape = (n, n))  # initilaisation de L
+        U = np.zeros(shape = (n, n))  # initilaisation de U
+    
+        for j in range(n):
+            U[0][j] = A[0][j]
+            L[j][0] = A[j][0] / U[0][0]
+        for i in range(1, n):
+            for j in range(i, n):
+                s1 = sum(U[k][j] * L[i][k] for k in range(i))
+                U[i][j] = A[i][j] - s1
+            for j in range(i + 1, n):
+                s2 = sum(U[k][i] * L[j][k] for k in range(i))
+                L[j][i] = (A[j][i] - s2) / U[i][i]
+        y = [0.0] * n
+        for i in range(n):
+            s3 = sum(L[i][k] * y[k] for k in range(i))
+            y[i] = B[i] - s3
+        x = [0.0] * n
+        for i in range(n - 1, -1, -1):
+            s4 = sum(U[i][k] * x[k] for k in range(i + 1, n))
+            x[i] = (y[i] - s4) / U[i][i]
+            
+    except AssertionError:
+        print("\nLa matrice A n'est pas carrée ou b n'est pas une matrice colonne")
+    except ZeroDivisionError:
+        print("\n\tERREUR: Division par zéro")
+    except Exception:
+        print("\n\tERREUR: Une erreur s'est produite, réessayez avec d'autres données !")
+    return L, U, y, x
+# ==========================================================================================
+def crout(A,b):
+    try:
+         # verifier si la matrice A est carrée
+        m, n, p = np.shape(A)[0], np.shape(A)[1], len(b)  # respectivemnt nb de lignes et de colonnes
+        assert m == n == p
+        
+        L = np.zeros(shape = (n, n))  # initilaisation de L
+        U = np.zeros(shape = (n, n))  # initilaisation de U
+   
+        for j in range(n):
+            U[j][j] = 1.0
+            for i in range(j, n):
+                s1 = sum(U[k][j] * L[i][k] for k in range(j))
+                L[i][j] = A[i][j] - s1
+            for i in range(j + 1, n):
+                s2 = sum(U[k][j] * L[j][k] for k in range(j))
+                U[j][i] = (A[j][i] - s2) / L[j][j]
+        Y = calcul_Y_pour_LU(L, b)
+        X = vecteur_solution(U, Y)
+        return L, U, Y, X
+                
+    except AssertionError:
+        print("\nLa matrice A n'est pas carrée ou b n'est pas une matrice colonne")
+    except ZeroDivisionError:
+        print("\n\tERREUR: Division par zéro")
+    except Exception:
+        print("\n\tERREUR: Une erreur s'est produite, réessayez avec d'autres données !")
+# ======================================================================================
+def cholesky(A, b):
+    try:
+        n = len(A)
+        L = np.zeros(shape = (n, n)) 
+        # vérifier si la matrice est symétrique
+        for i in range(n):
+            for j in range(n):
+                if A[i,j] != np.transpose(A)[i,j]:
+                    raise AssertionError
+        # vérification de la définition positive
+        sum_items = 0
+        for i in range(n):
+            for j in range(n):
+                if i != j:
+                    sum_items = abs(A[i,j]) # somme des termes hors de la diagonale
+            if A[i, i] <= sum_items:
+                raise PermissionError
+        # calcul
+        for i in range(n):
+            for j in range(i + 1):
+                s = sum(L[i][k] * L[j][k] for k in range(j))
+                if (i == j):
+                    L[i][j] = sqrt(A[i][i] - s)
+                else:
+                    L[i][j] = (1.0 / L[j][j] * (A[i][j] - s))
+        Y = calcul_Y_pour_LU(L, b)
+        X = vecteur_solution(np.transpose(L), Y)
+        return L, np.transpose(L), Y, X
+    except AssertionError:
+        print("\n\tERREUR: Matrice non symétrique")
+    except PermissionError:
+        print("\n\tERREUR: Matrice non définie positive")
+# ===========================================================================================
 A = np.array([
-    [4, -1, 1],
-    [4, -8, 1],
-    [-2, 1, 5]
+    [4, 1, 1],
+    [1, 5, 2],
+    [1, 2, 6]
 ])
-# C = np.diag([1, 5, 9]) # pour la deckaration d'une matrice diagonale
-# b = np.array([[7],[-21],[15]])
 b = np.array([7,-21,15])
-
-L, U, Y, X = methode_LU_Doolite(A, b)
+L, transposedL, Y, X2 = crout(A, b)
 print(L)
-print(U)
+print(transposedL)
 print(Y)
-print("\n", X)
-
-
-
-# x, D = Gauss_jordanV2(A, b)
-# x2 = Gauss_elimination(A,b)
-# print(D)
-# print(x)
-# print(x2)
-# matrice_diagonale(A, b)
-# matrice_diagonale(C, b)
-# matrice_triangulaire_sup(A, b)
-
-# TEST
-"""A = np.array([
-    [1, 3, 1, 1],
-    [2, -1, 0, 2],
-    [5, 4, 3, -3],
-    [0, 1, 4, 2]
-])
-
-B = np.array([8, 6, -2, 0])
-print(B)"""
-
-"""A = np.array([
-    [1, 3, 1, 1],
-    [2, -1, 0, 2],
-    [5, 0, 3, -3],
-    [0, 1, 4, 2]
-])
-
-B = np.array([8, 6, 2, 0])"""
+print(X2)
 
 
 # Gauss_elimination(A, B) # appel de la fonction pivot
