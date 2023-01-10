@@ -326,6 +326,24 @@ def gauss_seidel(A, b, x = [0, 0, 0], max_iter=100, tol=1e-5):
             return x_new
         x = x_new
     return x
+# ===========================================================================================
+def thomas(a, b, c, d): 
+    # a,b,c represente respectivement la diagonale inf, pribcipale, sup
+    # d est le vecteur du second membre
+    n = len(d)
+    
+    # calcul des matrice intermediaires
+    c_ = [0] + [c[i]/b[i] for i in range(1,n)] 
+    d_ = [d[i]/b[i] for i in range(n)]
+    
+    for i in range(1,n):
+        d_[i] = d_[i] - c_[i]*d_[i-1]
+        b[i] = b[i] - a[i]*c_[i-1]
+    x = np.zeros(n,1)  # initialisation de x
+    x[-1] = d_[-1]  #   dernier élément
+    for i in range(n-2,-1,-1):
+        x[i] = d_[i] - c_[i]*x[i+1]
+    return x
 
 
 
@@ -347,6 +365,12 @@ print('\n========================== E Q U A T I O N   D U  T Y P E   A * X  =  B
 
 A = np.array([[4, 1, 1],[1, 5, 2],[1, 2, 6]])
 b = np.array([7,-21,15])
+a = [1, 2, 3, 4]
+b = [5, 6, 7, 8]
+c = [9, 10, 11, 12]
+d = [13, 14, 15, 16]
+
+
 
 continuer = 'o' # variable servant de condition de continuation
 valide = True
@@ -365,10 +389,12 @@ while continuer == 'o':
     print("\n\t 5- LU - CHOLESKY ")
     print("\n\t 6- JACOBI ")
     print("\n\t 7- GAUSS - SEIDEL ")
-        
+    print("\n\t 8- THOMAS ")
+    
+    
     try:
-        choix = int(input("\nFaire un choix entre {1} {2} {3} {4} {5} {6} {7}: "))
-        if choix in [1, 2, 3, 4, 5, 6, 7]:
+        choix = int(input("\nFaire un choix entre {1} {2} {3} {4} {5} {6} {7} {8}: "))
+        if choix in [1, 2, 3, 4, 5, 6, 7, 8]:
             # appel aux procedures des methodes
             if choix == 1:
                 print("\n\t================ M E T H O D E   D E   G A U S S ================")
@@ -405,6 +431,9 @@ while continuer == 'o':
             elif choix == 7:
                 print("\n\t================ M E T H O D E    D E   G A U S S - S E I D E L  ================")
                 print("\nX = \n", gauss_seidel(A, b))
+            elif choix == 8:
+                print("\n\t================ M E T H O D E    D E   T H O M A S  ================")
+                print("\nX = \n", gauss_seidel(a,b,c,d))
             else:
                 pass
         else:
