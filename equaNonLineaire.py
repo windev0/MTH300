@@ -1,4 +1,4 @@
-from math import ceil, exp, fabs, log, log10, sqrt
+from math import ceil, exp, fabs, log
 import os
 
 def nbre_solutions(x1, x2, pas):    # cette fonction retourne le nb de solution apres balayage
@@ -17,7 +17,6 @@ def effacer_console():
         cmd = 'cls' # cas de windows, la commande sera cls et non clear
     os.system(cmd) # effacer la console
 #---------------------------------------------------------------------------------------------
-
 def saisie_bornes():
     try:
         x1 = int(input("\n\tVeuillez saisir la borne inférieure X1 = "))
@@ -74,7 +73,6 @@ f = lambda x : exp(-x) - x
 #---------------------------------------------------------------------------------------------
 g = lambda x : exp(-x) + x
 #---------------------------------------------------------------------------------------------
-
 devf = lambda x : -exp(-x) - 1
     # reperesente la fonction derivee 
 #---------------------------------------------------------------------------------------------
@@ -84,9 +82,7 @@ def tronquer(nb, m):
     partie_ent, partie_decim = nb.split('.')
     nb = '.'.join([partie_ent, partie_decim[:m]])
     return float(nb) 
-
 #=============================================================================================
-
 def secante():
     try:
         x0 = saisie_X0()
@@ -122,9 +118,7 @@ def secante():
         print("\n\tErreur: La premiere valeur initiale doit etre inférieure à la seconde!")
     except ZeroDivisionError:
         print("\n\tErreur: Division par zéro, car f(", x1, ') - f(', x0, ') = 0; essayez avec d\'autres valeurs')
-
 #---------------------------------------------------------------------------------------------
-
 def newton():
     try:
         e = saisie_tolerance()
@@ -156,9 +150,7 @@ def newton():
         print("\n\tErreur: Une ou plusieurs donnée(s) entrée(s) est (sont) non valide(s)")
     except ZeroDivisionError:
         print("\n\tErreur: Division par zéro, car f'(", x0, ') = 0', "essayer avec d'autres valeurs !")
-
 # -----------------------------------------------------------------------------------------------------------------------------------------
-
 def point_fixe():
     try:
         x0 = saisie_X0()
@@ -192,8 +184,7 @@ def point_fixe():
         print("\n\tErreur: Division par zéro, essayer avec d'autres valeurs !")
     except OverflowError:
         print("\n\tErreur: Dépassement de capacité !")
-#---------------------------------------------------------------------------------------------
-        
+#---------------------------------------------------------------------------------------------       
 def dichotomie():
     try:
         x1, x2 = saisie_bornes()    # saisie des bornes de l'intervale
@@ -240,6 +231,8 @@ def dichotomie():
     except ZeroDivisionError:
         print("\n\tErreur: Division par zéro, essayer avec d'autres valeurs !")
 # -----------------------------------------------------------------------------------------------------------------------------------------
+
+
 if __name__ == '__main__':
     effacer_console() # on rend au propre la console
 
