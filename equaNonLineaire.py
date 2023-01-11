@@ -240,7 +240,7 @@ def dichotomie():
     except ZeroDivisionError:
         print("\n\tErreur: Division par zéro, essayer avec d'autres valeurs !")
 # -----------------------------------------------------------------------------------------------------------------------------------------
-def main():
+if __name__ == '__main__':
     effacer_console() # on rend au propre la console
 
     # Test des différentes méthodes
@@ -261,9 +261,11 @@ def main():
             print("\n\t 2- SECANTE ")
             print("\n\t 3- NEWTON ")
             print("\n\t 4- POINTS FIXES ")
+            print("\n\t 5- QUITTER ")
+            
             try:
-                choix = int(input("\nFaire un choix entre {1} {2} {3} {4}: "))
-                if choix in [1, 2, 3, 4]:
+                choix = int(input("\nFaire un choix entre {1} {2} {3} {4} {5}: "))
+                if choix in [1, 2, 3, 4, 5]:
                     # appel aux procedures des methodes
                     if choix == 1:
                         print("\n\t================ D I C H O T O M I E ================")
@@ -277,40 +279,35 @@ def main():
                     elif choix == 4:
                         print("\n\t================ P O I N T  F I X E ================")
                         point_fixe()
+                    elif choix == 5:
+                        continuer = 'n'
                     else:
                         pass
                 else:
                     raise PermissionError
-        
-                # continuer = str.lower(input("\nVoulez vous continuer (o/n)? ")) # forcer la valeur du choix a etre en minuscule
-                # if continuer != 'n' and continuer != 'o':
-                #     print("\n\tErreur: Saisie invalide ")
-                
-                continuer = str.lower(input("\nVoulez vous continuer (o/n)? ")) # forcer la valeur du choix a etre en minuscule
-                valide = True
-                if continuer != 'n' and continuer != 'o':
-                    valide = False
-                    print("\n\tErreur: Saisie invalide ")
-            
-                while valide == False:        
+                if continuer == 'o':
                     continuer = str.lower(input("\nVoulez vous continuer (o/n)? ")) # forcer la valeur du choix a etre en minuscule
+                    valide = True
                     if continuer != 'n' and continuer != 'o':
                         valide = False
                         print("\n\tErreur: Saisie invalide ")
-                    else:
-                        valide = True
+                
+                    while valide == False:        
+                        continuer = str.lower(input("\nVoulez vous continuer (o/n)? ")) # forcer la valeur du choix a etre en minuscule
+                        if continuer != 'n' and continuer != 'o':
+                            valide = False
+                            print("\n\tErreur: Saisie invalide ")
+                        else:
+                            valide = True
                         
             except PermissionError or TypeError or NameError :
                 print("\nChoix invalide !")
             except ValueError:
                 print("\nChoix invalide !")
                 
-                
             # effacer_console() # on rend au propre la console
-
     else:
         print("\nAucune solution pour cette équation !")
-
     print('\n')
 
 # main()
