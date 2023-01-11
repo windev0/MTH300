@@ -282,21 +282,38 @@ def main():
                 else:
                     raise PermissionError
         
-                continuer = str.lower(input("\nVoulez vous continuer (o/n)? ")) # forcer la valeur du choix a etre en minuscule
-                if continuer != 'n' and continuer != 'o':
-                    print("\n\tErreur: Saisie invalide ")
+                # continuer = str.lower(input("\nVoulez vous continuer (o/n)? ")) # forcer la valeur du choix a etre en minuscule
+                # if continuer != 'n' and continuer != 'o':
+                #     print("\n\tErreur: Saisie invalide ")
                 
-            except PermissionError:
+                continuer = str.lower(input("\nVoulez vous continuer (o/n)? ")) # forcer la valeur du choix a etre en minuscule
+                valide = True
+                if continuer != 'n' and continuer != 'o':
+                    valide = False
+                    print("\n\tErreur: Saisie invalide ")
+            
+                while valide == False:        
+                    continuer = str.lower(input("\nVoulez vous continuer (o/n)? ")) # forcer la valeur du choix a etre en minuscule
+                    if continuer != 'n' and continuer != 'o':
+                        valide = False
+                        print("\n\tErreur: Saisie invalide ")
+                    else:
+                        valide = True
+                        
+            except PermissionError or TypeError or NameError :
+                print("\nChoix invalide !")
+            except ValueError:
                 print("\nChoix invalide !")
                 
-            effacer_console() # on rend au propre la console
+                
+            # effacer_console() # on rend au propre la console
 
     else:
         print("\nAucune solution pour cette équation !")
 
     print('\n')
 
-# main()
+main()
 # dichotomie()
 # point_fixe()
 # newton()

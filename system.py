@@ -433,7 +433,7 @@ while continuer == 'o':
                 print("\nX = \n", gauss_seidel(A, b))
             elif choix == 8:
                 print("\n\t================ M E T H O D E    D E   T H O M A S  ================")
-                print("\nX = \n", gauss_seidel(a,b,c,d))
+                print("\nX = \n", thomas(a,b,c,d))
             else:
                 pass
         else:
@@ -443,11 +443,9 @@ while continuer == 'o':
         if continuer != 'n' and continuer != 'o':
             valide = False
             print("\n\tErreur: Saisie invalide ")
-        else:
-            valide = True
+       
         while valide == False:        
             continuer = str.lower(input("\nVoulez vous continuer (o/n)? ")) # forcer la valeur du choix a etre en minuscule
-
             if continuer != 'n' and continuer != 'o':
                 valide = False
                 print("\n\tErreur: Saisie invalide ")
