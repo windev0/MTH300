@@ -440,6 +440,7 @@ while continuer == 'o':
             raise PermissionError
         
         continuer = str.lower(input("\nVoulez vous continuer (o/n)? ")) # forcer la valeur du choix a etre en minuscule
+        valide = True
         if continuer != 'n' and continuer != 'o':
             valide = False
             print("\n\tErreur: Saisie invalide ")

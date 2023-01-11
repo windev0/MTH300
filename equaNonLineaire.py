@@ -313,7 +313,7 @@ def main():
 
     print('\n')
 
-main()
+# main()
 # dichotomie()
 # point_fixe()
 # newton()
