@@ -386,15 +386,20 @@ if __name__ == "__main__":
     print('\n========================== E Q U A T I O N   D U  T Y P E   A * X  =  B ==========================')
 
     # SAISI DES MATRICES
-    A = np.array([[4, 1, 1],[1, 5, 2],[1, 2, 6]])
-    b = np.array([7,-21,15])
+    # A = np.array([[4, 1, 1],[1, 5, 2],[1, 2, 6]])
+    # b = np.array([7,-21,15])
+    A = np.array([[1, 2, 3],[2, 3, 1],[1, 1, -2]])
+    b = np.array([6, 6, 0])
 
     continuer = 'o' # variable servant de condition de continuation
     valide = True
     while continuer == 'o':
         
-        A = np.array([[4, 1, 1],[1, 5, 2],[1, 2, 6]])
-        b = np.array([7,-21,15])
+        # A = np.array([[4, 1, 1],[1, 4, 1],[1, 1, 4]])
+        # b = np.array([9,12,15])
+        
+        A = np.array([[1, 2, 3],[2, 3, 1],[1, 1, -2]])
+        b = np.array([6, 6, 0])
         
         # affichage du menu
         print("\n\t M E N U ")
