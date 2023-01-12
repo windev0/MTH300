@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from math import sin
+# from math import sin
 
 def lagrange(x, y):
     xplt = np.linspace(x[0], x[-1])
@@ -41,7 +41,7 @@ def interpolation_newton(x, y, x_new):
         for j in range(i):
             term *= (x_new - x[j])
         p += term
-    print(p)
+    return p
     #     yplt = np.append(yplt, p)
         
     # # courbe
