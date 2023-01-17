@@ -391,7 +391,7 @@ if __name__ == "__main__":
     A = np.array([[1, 2, 3],[2, 3, 1],[1, 1, -2]])
     b = np.array([6, 6, 0])
     
-    if np.linalg.det(A != 0):
+    if np.linalg.det(A != 0): # cas ou la matrice est inversible
 
         continuer = 'o' # variable servant de condition de continuation
         valide = True
@@ -488,4 +488,4 @@ if __name__ == "__main__":
                 # effacer_console() # on rend au propre la console
         print('\n')
     else:
-        print("\n\tERREUR: Matrice non inversible")
+        print("\n\tERREUR: Matrice non inversible !")
