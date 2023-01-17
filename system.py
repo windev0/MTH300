@@ -149,35 +149,28 @@ def Gauss_jordanV2(A, B):
         
     return B, A      # B est le vecteur solution X, et A la nouvelle matrice dont les pivot sont à 1     
 # ==============================================================================================
-def Gauss_jordan(A, B):
-    A = np.array(A, int)
-    B = np.array(B, int)
-    n = len(B)
-    
-    # boucle principale
-    for k in range(n):
-        # partial pivoting
-        if np.fabs(A[k, k]) < 1.0e-12:
-            for i in range(k+1, n):
-                if np.fabs(A[i, k]) > np.fabs(A[k, k]):
-                    for j in range(k, n):
-                        A[k, j], A[i, j] = A[i, j], A[k, j]
-                    B[k], B[i] = B[i], B[k]
-                    break
-        # Division of the pivot row
-        pivot = A[k, k]
-        for j in range(k, n):
-            A[k, j] /= pivot
-        B[k] /= pivot
-        # Elimination loop
-        for i in range(n):
-            if i == k or A[i, k] == 0: continue
-            factor = A[i, k]
-            for j in range(k, n):
-                A[i, j] -= factor * A[k, j]
-            B[i] -= factor * B[k]
-            
-    return B, A
+def gauss_jordan(A, b):
+    n = len(b)
+    Ab = np.hstack([A, b.reshape(-1, 1)]) # matrice augmentee
+    # trianguler la matrice augmentee
+    for i in range(n):
+        # recherche du pivot maximal dans la colonne i
+        pivot = i
+        for j in range(i+1, n):
+            if abs(Ab[j, i]) > abs(Ab[pivot, i]):
+                pivot = j
+        # échanger les lignes i et pivot
+        Ab[[i, pivot]] = Ab[[pivot, i]]
+        # normaliser la ligne i
+        Ab[i] = Ab[i] / Ab[i, i]
+        # soustraire la ligne i des autres lignes
+        for j in range(n):
+            if j != i:
+                Ab[j] = Ab[j] - Ab[j, i] * Ab[i]
+    # séparer la matrice étendue en deux matrices
+    x = Ab[:, n]
+    A = Ab[:, :n]
+    return A, x
 # ==============================================================================================
 def calcul_Y_pour_LU(L, B):
     Y = matrice_triangulaire_inf(L, B) # appel à procedure pour la remontée
@@ -327,23 +320,34 @@ def gauss_seidel(A, b, x = [0, 0, 0], max_iter=100, tol=1e-5):
         x = x_new
     return x
 # ===========================================================================================
-"""def thomas(a, b, c, d): 
-    # a,b,c represente respectivement la diagonale inf, pribcipale, sup
-    # d est le vecteur du second membre
-    n = len(d)
+def thomas(A, d):
+    try:
+        print(np.diag(A, k=-1))
+        a = np.diag(A, k=-1)     # diagonale  inférieure
+        b = np.diag(A, k=0)      # diagonale principale
+        c = np.diag(A, k=1)      # diagonale supérieure
+        m, p = matrice_tri_diag(b, c, a)
+        assert m == True
+        n = len(d)
+        # étape de substitution avant
+        for i in range(1, n):
+            b[i] = b[i] - (a[i-1] * c[i-1]) / b[i-1]
+            d[i] = d[i] - (d[i-1] * c[i-1]) / b[i-1]
+        # résolution du système
+        x = np.zeros(n)
+        x[-1] = d[-1] / b[-1]
+        for i in range(n-2, -1, -1):
+            x[i] = (d[i] - a[i] * x[i+1]) / b[i]
+        return x
+    except AssertionError:
+        print("\n\tErreur:Matrice non tri-diagonale")
+# =================================================================================================================
+def matrice_tri_diag(main_diag, upper_diag, lower_diag):
     
-    # calcul des matrice intermediaires
-    c_ = [0] + [c[i]/b[i] for i in range(1,n)] 
-    d_ = [d[i]/b[i] for i in range(n)]
-    
-    for i in range(1,n):
-        d_[i] = d_[i] - c_[i]*d_[i-1]
-        b[i] = b[i] - a[i]*c_[i-1]
-    x = np.zeros(n,1)  # initialisation de x
-    x[-1] = d_[-1]  #   dernier élément
-    for i in range(n-2,-1,-1):
-        x[i] = d_[i] - c_[i]*x[i+1]
-    return x"""
+    # créer la matrice tri-diagonale
+    tri_diag = np.diagflat(main_diag) + np.diag(upper_diag, k=1) + np.diag(lower_diag, k=-1)
+
+    return True, tri_diag # retourner la matrice tri-diagonale
 # ===================================================================================================================
 def decompoThomas(A,b):
     n = len(b)
@@ -386,22 +390,25 @@ if __name__ == "__main__":
     print('\n========================== E Q U A T I O N   D U  T Y P E   A * X  =  B ==========================')
 
     # SAISI DES MATRICES
-    # A = np.array([[4, 1, 1],[1, 5, 2],[1, 2, 6]])
-    # b = np.array([7,-21,15])
-    A = np.array([[1, 2, 3],[2, 3, 1],[1, 1, -2]])
-    b = np.array([6, 6, 0])
+    A = np.array([[4, 1, 1],[1, 5, 2],[1, 2, 6]])
+    # A = np.array([[5, 8, 0, 0], [2, 6, 9, 0], [0, 3, 7, 10], [0, 0, 4, 4]])
+    # b = np.array([11, 12, 13])
+    b = np.array([7,-21,15])
+    # A = np.array([[1, 2, 3],[2, 3, 1],[1, 1, -2]])
+    # b = np.array([6, 6, 0])
     
-    if np.linalg.det(A != 0): # cas ou la matrice est inversible
+    if int(np.linalg.det(A)) != 0: # cas ou la matrice est inversible
 
         continuer = 'o' # variable servant de condition de continuation
         valide = True
         while continuer == 'o':
             
-            # A = np.array([[4, 1, 1],[1, 4, 1],[1, 1, 4]])
-            # b = np.array([9,12,15])
-            
-            A = np.array([[1, 2, 3],[2, 3, 1],[1, 1, -2]])
-            b = np.array([6, 6, 0])
+            A = np.array([[4, 1, 1],[1, 5, 2],[1, 2, 6]])
+            # A = np.array([[5, 8, 0, 0], [2, 6, 9, 0], [0, 3, 7, 10], [0, 0, 4, 4]])
+            # b = np.array([11, 12, 13, 14])
+            b = np.array([7,-21,15])
+            # A = np.array([[1, 2, 3],[2, 3, 1],[1, 1, -2]])
+            # b = np.array([6, 6, 0])
             
             # affichage du menu
             print("\n\t M E N U ")
@@ -425,7 +432,7 @@ if __name__ == "__main__":
                         print("\nX = \n", Gauss_elimination(A, b))
                     elif choix == 2:
                         print("\n\t================ M E T H O D E   D E   G A U S S - J O R D A N ================")
-                        x, newA = Gauss_jordan(A,b)
+                        newA, x = gauss_jordan(A,b)
                         print("\nA = \n", newA)
                         print("\nX = \n", x)
                     elif choix == 3:
@@ -458,6 +465,7 @@ if __name__ == "__main__":
                     elif choix == 8:
                         print("\n\t================ M E T H O D E    D E   T H O M A S  ================")
                         print("\nX = \n", resolveThomas(A,b))
+                        # print("\nX = \n", thomas(A,b))
                     elif choix == 9:
                         continuer = 'n'
                     else:
