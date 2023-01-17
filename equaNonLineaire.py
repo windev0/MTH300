@@ -183,7 +183,7 @@ def point_fixe():
     except ZeroDivisionError:
         print("\n\tErreur: Division par zéro, essayer avec d'autres valeurs !")
     except OverflowError:
-        print("\n\tErreur: Dépassement de capacité !")
+        print("\n\tErreur: Dénb_etapesement de capacité !")
 #---------------------------------------------------------------------------------------------       
 def dichotomie():
     try:
@@ -275,7 +275,7 @@ if __name__ == '__main__':
                     elif choix == 5:
                         continuer = 'n'
                     else:
-                        pass
+                        nb_etapes
                 else:
                     raise PermissionError
                 if continuer == 'o':
@@ -311,5 +311,5 @@ if __name__ == '__main__':
 """print(tronquer(3.99999999999998, 5))
 liste = ['', 1, 0, 1, '\n', 4, 5, 1, "\n", 8, 1, 2]
 print(*liste)
-mot_de_passe = getpass()
-print(mot_de_passe)"""
+mot_de_nb_etapese = getnb_etapes()
+print(mot_de_nb_etapese)"""

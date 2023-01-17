@@ -71,7 +71,12 @@ def computeNewtonCoefs(x, y):
         c[j] = (y[j]-pm1)/np.prod(z[:j+1])
     return c
 # ===============================================================================================
-
+def moindre_carree(x,y):
+    n = len(x)
+    ahat = (sum(x*x)*sum(y)-sum(x)*sum(x*y))/(n*sum(x*x)-sum(x)**2)
+    bhat = (n*sum(x*y)-sum(x)*sum(y))/(n*sum(x*x)-sum(x)**2)
+    y_new = ahat + bhat * x
+    return y_new
 # ===============================================================================================
 
     
@@ -82,8 +87,10 @@ x_new = np.linspace(x[0], x[-1], 50)
 p = interpolation_newton(x,y,x_new)
 
 # courbe
-plt.plot(x, y, 'go', xplt, yplt, 'r--', label= "Lagrange")
-plt.plot(x, y, 'yo', x_new, p, 'b.', label= 'Newton')
+plt.plot(x, y, 'yo', label= 'Courbe principale')
+plt.plot(xplt, yplt, 'r--', label= "Lagrange")
+plt.plot(x_new, p, 'b.', label= 'Newton')
+plt.plot(x, moindre_carree(x,y), 'b-', label= 'Moindre carree')
 plt.legend()
 plt.title('INTERPOLATION')
 plt.xlabel('x')
