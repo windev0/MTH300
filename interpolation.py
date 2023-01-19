@@ -45,13 +45,6 @@ def interpolation_newton(x, y, x_new):
             term *= (x_new - x[j])
         p += term
     return p
-    
-    # # courbe
-    # plt.plot(x, y, 'ro', x_new, p, 'b--')
-    # plt.title('Newton')
-    # plt.xlabel('x')
-    # plt.ylabel('y')
-    # plt.show()
 # ===============================================================================================
 def computeNewtonCoefs(x, y):
     n = len(x) # nb de points
@@ -78,8 +71,8 @@ def moindre_carree(x,y):
     y_new = ahat + bhat * x
     return y_new
 # ===============================================================================================
-
-    
+def vandermone(x, y):
+    M = np.vstack()
 x = np.array([0, 20, 40, 60, 80, 100])
 y = np.array([26.0, 48.0, 61.6, 71.2, 74.8, 75.2], float)
 xplt, yplt = lagrange(x, y)
@@ -91,6 +84,7 @@ plt.plot(x, y, 'yo', label= 'Courbe principale')
 plt.plot(xplt, yplt, 'r--', label= "Lagrange")
 plt.plot(x_new, p, 'b.', label= 'Newton')
 plt.plot(x, moindre_carree(x,y), 'b-', label= 'Moindre carree')
+plt.plot([-1, 1, 2, 3], [-12, -14, -18, -8], 'ro', label='vendermone')
 plt.legend()
 plt.title('INTERPOLATION')
 plt.xlabel('x')

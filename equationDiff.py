@@ -29,7 +29,7 @@ def runge_kunta4(x0, y0, pas, nb_etapes):
         
     return x, y # les couples de points (x,y)
 # =========================================================================================================
-def euler_modified(f, y0, t0, tf, h):
+def euler_modified(f, y0, t0, tf, h):  
     t = np.arange(t0, tf+h, h)
     y = np.zeros(len(t))
     y[0] = y0
