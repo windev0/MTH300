@@ -1,4 +1,5 @@
 import numpy as np
+import sys
 from math import sqrt
 # from numpy.linalg import norm, inv, inf
 from equaNonLineaire import effacer_console
@@ -22,11 +23,14 @@ def matrice_diagonale(A, b):
         return sol                                   # renvoie de la solution                       
     
     except AssertionError:
-        print("\n\tERREUR: la matrice n'est pas carree ou la matrice b n'est pas un vecteur") 
+        print("\n\tERREUR: la matrice n'est pas carree ou la matrice b n'est pas un vecteur")
+        sys.exit('Fin du programme') 
     except TypeError or ValueError or NameError:
         print("\n\tUne ou plusieurs donnée(s) entrée(s) est (sont) non valide(s)")   
+        sys.exit('Fin du programme') 
     except PermissionError:
         print("\n\tERREUR: Matrice non diagonale")
+        sys.exit('Fin du programme') 
 # ==================================================================================================
 def matrice_triangulaire_sup(A, b):
     try:
@@ -52,10 +56,13 @@ def matrice_triangulaire_sup(A, b):
         return  sol                            # renvoie de la solution
     except AssertionError:
         print("\n\tERREUR: la matrice n'est pas carree ou la matrice b n'est pas un vecteur")
+        sys.exit('Fin du programme') 
     except TypeError or ValueError or NameError:
         print("\n\tUne ou plusieurs donnée(s) entrée(s) est (sont) non valide(s)")
+        sys.exit('Fin du programme')
     except PermissionError:
         print("\n\tERREUR: Matrice non triangulaire supérieure !")
+        sys.exit('Fin du programme')
 # ==================================================================================================
 def matrice_triangulaire_inf(A, b):
     try:
@@ -79,11 +86,14 @@ def matrice_triangulaire_inf(A, b):
             
         return sol
     except AssertionError:
-        print("\n\tERREUR: la matrice n'est pas carree ou pas triangulaire inférieure ou la matrice b n'est pas un vecteur")  
+        print("\n\tERREUR: la matrice n'est pas carree ou pas triangulaire inférieure ou la matrice b n'est pas un vecteur")
+        sys.exit('Fin du programme')  
     except TypeError or ValueError or NameError:
-        print("\n\tUne ou plusieurs donnée(s) entrée(s) est (sont) non valide(s)")  
+        print("\n\tUne ou plusieurs donnée(s) entrée(s) est (sont) non valide(s)")
+        sys.exit('Fin du programme')    
     except PermissionError:
         print("\n\tERREUR: Matrice non triangulaire inférieure !")
+        sys.exit('Fin du programme') 
 # ==============================================================================================
 def Gauss_elimination(A, B):
     try:
@@ -115,10 +125,13 @@ def Gauss_elimination(A, B):
             
     except AssertionError:
         print("\nLa matrice n'est pas carrée !")
+        sys.exit('Fin du programme')  
     except ValueError or TypeError or NameError:
         print("\n\nERREUR: Une erreur s'est produite, veuillez reprendre avec d'autres données")
+        sys.exit('Fin du programme')  
     except ZeroDivisionError:
         print("\n\tERREUR: Division par zéro !")
+        sys.exit('Fin du programme')  
 # ==============================================================================================
 def Gauss_jordanV2(A, B):
     try:
@@ -146,6 +159,7 @@ def Gauss_jordanV2(A, B):
             
     except AssertionError: 
         print("\nLa matrice n'est pas carrée !")
+        sys.exit('Fin du programme')  
         
     return B, A      # B est le vecteur solution X, et A la nouvelle matrice dont les pivot sont à 1     
 # ==============================================================================================
@@ -182,7 +196,7 @@ def vecteur_solution(U, Y): # permet de déterminer le x à partir du y
 # ==============================================================================================
 def doolittle(A, B):
     try:
-         # verifier si la matrice A est carrée
+        # verifier si la matrice A est carrée
         m, n, p = np.shape(A)[0], np.shape(A)[1], len(B)   # respectivemnt nb de lignes et de colonnes
         assert m == n == p
         
@@ -210,10 +224,13 @@ def doolittle(A, B):
             
     except AssertionError:
         print("\nLa matrice A n'est pas carrée ou b n'est pas une matrice colonne")
+        sys.exit('Fin du programme')  
     except ZeroDivisionError:
         print("\n\tERREUR: Division par zéro")
+        sys.exit('Fin du programme')  
     except Exception:
         print("\n\tERREUR: Une erreur s'est produite, réessayez avec d'autres données !")
+        sys.exit('Fin du programme')  
     return L, U, y, x
 # ==========================================================================================
 def crout(A,b):
@@ -239,10 +256,13 @@ def crout(A,b):
                 
     except AssertionError:
         print("\nLa matrice A n'est pas carrée ou b n'est pas une matrice colonne")
+        sys.exit('Fin du programme')  
     except ZeroDivisionError:
         print("\n\tERREUR: Division par zéro")
+        sys.exit('Fin du programme')  
     except Exception:
         print("\n\tERREUR: Une erreur s'est produite, réessayez avec d'autres données !")
+        sys.exit('Fin du programme') 
 # ======================================================================================
 def cholesky(A, b):
     try:
@@ -274,8 +294,10 @@ def cholesky(A, b):
         return L, np.transpose(L), Y, X
     except AssertionError:
         print("\n\tERREUR: Matrice non symétrique")
+        sys.exit('Fin du programme')
     except PermissionError:
         print("\n\tERREUR: Matrice non définie positive")
+        sys.exit('Fin du programme')
 # ===========================================================================================
 def jacobi(A, b, nmax = 100, tol = 1e-5):
     try:
@@ -301,28 +323,43 @@ def jacobi(A, b, nmax = 100, tol = 1e-5):
             
     except AssertionError:
         print("\nLa matrice A n'est pas carrée ou b n'est pas une matrice colonne")
+        sys.exit('Fin du programme')
     except ZeroDivisionError:
         print("\n\tERREUR: Division par zéro")
+        sys.exit('Fin du programme')
     except Exception:
         print("\n\tERREUR: Une erreur s'est produite, réessayez avec d'autres données !")
+        sys.exit('Fin du programme')
 # ===========================================================================================
 def gauss_seidel(A, b, x = [0, 0, 0], max_iter=100, tol=1e-5):
-    n = len(A)
-    cpt = 0
-    while cpt < max_iter:
-        x_new = x.copy()
-        for j in range(n):
-            s1 = sum(A[j][k] * x_new[k] for k in range(j))
-            s2 = sum(A[j][k] * x[k] for k in range(j+1, n))
-            x_new[j] = (b[j] - s1 - s2) / A[j][j]
-        if all(abs(x_new[i] - x[i]) < tol for i in range(n)):
-            return x_new
-        x = x_new
-    return x
+    try:
+        # verifier si la matrice A est carrée
+        m, n, p = np.shape(A)[0], np.shape(A)[1], len(b)   # respectivemnt nb de lignes et de colonnes
+        assert m == n == p
+        cpt = 0
+        while cpt < max_iter:
+            x_new = x.copy()
+            for j in range(n):
+                s1 = sum(A[j][k] * x_new[k] for k in range(j))
+                s2 = sum(A[j][k] * x[k] for k in range(j+1, n))
+                x_new[j] = (b[j] - s1 - s2) / A[j][j]
+            if all(abs(x_new[i] - x[i]) < tol for i in range(n)):
+                return x_new
+            x = x_new
+        return x
+    except AssertionError:
+        print("\nLa matrice A n'est pas carrée ou b n'est pas une matrice colonne")
+        sys.exit('Fin du programme')
+    except ZeroDivisionError:
+        print("\n\tERREUR: Division par zéro")
+        sys.exit('Fin du programme')
+    except Exception:
+        print("\n\tERREUR: Une erreur s'est produite, réessayez avec d'autres données !")
+        sys.exit('Fin du programme')
 # ===========================================================================================
 def thomas(A, d):
     try:
-        print(np.diag(A, k=-1))
+        # print(np.diag(A, k=-1))
         a = np.diag(A, k=-1)     # diagonale  inférieure
         b = np.diag(A, k=0)      # diagonale principale
         c = np.diag(A, k=1)      # diagonale supérieure
@@ -341,6 +378,10 @@ def thomas(A, d):
         return x
     except AssertionError:
         print("\n\tErreur:Matrice non tri-diagonale")
+        sys.exit('Fin du programme')
+    except IndexError: 
+        print("\n\tErreur: Demande d'accès à un élément de la matrice qui n'existe pas")
+        sys.exit('Fin du programme')
 # =================================================================================================================
 def matrice_tri_diag(main_diag, upper_diag, lower_diag):
     
@@ -350,20 +391,39 @@ def matrice_tri_diag(main_diag, upper_diag, lower_diag):
     return True, tri_diag # retourner la matrice tri-diagonale
 # ===================================================================================================================
 def decompoThomas(A,b):
-    n = len(b)
-    B, C = np.zeros(shape=(n,n)), np.zeros(shape=(n,n))
-    
-    C[0,0] = A[0,0]
-    
-    for i in range(n-1):
-        C[i,i+1] = A[i,i+1]
-    for i in range(n):
-        B[i,i] = 1
-        if(i >= 1):
-            B[i,i-1] = A[i,i-1]/C[i-1,i-1]
-            C[i,i] = A[i,i] - B[i,i-1]*A[i-1,i]
-            
-    return B, C
+    try:
+        # verifier si la matrice A est carrée
+        m, n, p = np.shape(A)[0], np.shape(A)[1], len(b)   # respectivemnt nb de lignes et de colonnes
+        if m != n and n != p: raise PermissionError
+        
+        a = np.diag(A, k=-1)     # diagonale  inférieure
+        b = np.diag(A, k=0)      # diagonale principale
+        c = np.diag(A, k=1)      # diagonale supérieure
+        m, h = matrice_tri_diag(b, c, a)
+        assert m == True
+        
+        # n = len(b)
+        B, C = np.zeros(shape=(n,n)), np.zeros(shape=(n,n))
+        
+        C[0,0] = A[0,0]
+        
+        for i in range(n-1):
+            C[i,i+1] = A[i,i+1]
+        for i in range(n):
+            B[i,i] = 1
+            if(i >= 1):
+                B[i,i-1] = A[i,i-1]/C[i-1,i-1]
+                C[i,i] = A[i,i] - B[i,i-1]*A[i-1,i]
+        return B, C
+    except AssertionError:
+        print("\n\tErreur:Matrice non tri-diagonale")
+        sys.exit('Fin du programme')
+    except PermissionError:
+        print("\n\tErreur:Matrice non tri-diagonale")
+        sys.exit('Fin du programme')
+    except IndexError: 
+        print("\n\tErreur: Demande d'accès à un élément de la matrice qui n'existe pas")
+        sys.exit('Fin du programme')
 # ===================================================================================================================
 def resolveThomas(A,b):
     n = np.shape(A)[0]
@@ -432,7 +492,7 @@ if __name__ == "__main__":
                         print("\nX = \n", Gauss_elimination(A, b))
                     elif choix == 2:
                         print("\n\t================ M E T H O D E   D E   G A U S S - J O R D A N ================")
-                        newA, x = gauss_jordan(A,b)
+                        x, newA = Gauss_jordanV2(A,b)
                         print("\nA = \n", newA)
                         print("\nX = \n", x)
                     elif choix == 3:

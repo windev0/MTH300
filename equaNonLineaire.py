@@ -1,5 +1,5 @@
 from math import ceil, exp, fabs, log
-import os
+import os, sys
 
 def nbre_solutions(x1, x2, pas):    # cette fonction retourne le nb de solution apres balayage
     a = x1 + pas                    # initialisation de a, et servira de borne sup temporaire
@@ -64,6 +64,12 @@ def convergence(x1, x2, e, nb, xm = 1):
     except TypeError or ValueError:
         print("\n\tErreur: donnée(s) invalide(s) !")
 #---------------------------------------------------------------------------------------------
+"""def f(x):
+    try:
+        return a*x + b
+    except NameError or TypeError:
+        print("\n\tERREUR: Fonction f(x) non valide !")
+        sys.exit()"""
 f = lambda x : exp(-x) - x
     # return x**3 + x**2 - 3*x - 3
     # return pow(x,2) - 2
@@ -71,7 +77,13 @@ f = lambda x : exp(-x) - x
     # return pow(x,2) - 2*x - 3
     # return pow(x,2) - 3*x + 2
 #---------------------------------------------------------------------------------------------
-g = lambda x : exp(-x) + x
+"""def g(x):
+    try:
+        return a*x + b
+    except NameError or TypeError:
+        print("\n\tERREUR: Fonction g(x) non valide !")
+        sys.exit()"""
+g = lambda x : exp(-x) 
 #---------------------------------------------------------------------------------------------
 devf = lambda x : -exp(-x) - 1
     # reperesente la fonction derivee 
@@ -159,21 +171,21 @@ def point_fixe():
         N = int(input("\n\tVeuillez saisir le nombre total d'itération N = "))
 
         if f(x0) == 0:
-            print("\tla solution est: X* = {}".format(x0))
+            print("\tla .solution est: X* = {}".format(x0))
         elif f(x1) == 0:
-            print("\tla solution est: X* = {}".format(x1))
+            print("\tla .solution est: X* = {}".format(x1))
         else:
             i = 1
             while not(convergence(x0, x1, e, 2, x1)) and i < N:
                 # mise a jour des valeurs 
                 x0 = x1
-                x1 = f(x0)
+                x1 = g(x0)
                 i += 1
             # Saisie des résultats
             print('\n-----------------------------------------------')
             if convergence(x0, x1, e, 2, x1):
                 print("\tconvergence atteinte en", i, 'itérations')
-            if i == N-1 and (not convergence(x0, x1, e, 2, x1)):
+            if i == N and (not convergence(x0, x1, e, 2, x1)):
                 print("\tConvergence non atteinte en {} itérations".format(i))
             print("\tla solution est: X* = {}".format(x1))
             print('-----------------------------------------------')
@@ -183,7 +195,7 @@ def point_fixe():
     except ZeroDivisionError:
         print("\n\tErreur: Division par zéro, essayer avec d'autres valeurs !")
     except OverflowError:
-        print("\n\tErreur: Dénb_etapesement de capacité !")
+        print("\n\tErreur: Dépassement de capacité !")
 #---------------------------------------------------------------------------------------------       
 def dichotomie():
     try:
@@ -240,7 +252,7 @@ if __name__ == '__main__':
     print('\n')
     print('\n========================== E Q U A T I O N   D U  T Y P E   F ( X ) = 0 ==========================')
 
-    a = nbre_solutions(0, 8, 0.01) # détermination du nombre de solutions
+    a = nbre_solutions(-10, 10, 0.01) # détermination du nombre de solutions
     if a > 0:
         print("\n Il existe {} solution (s)".format(a)) # affichage du nombre de solutions après balayage
         
@@ -275,7 +287,7 @@ if __name__ == '__main__':
                     elif choix == 5:
                         continuer = 'n'
                     else:
-                        nb_etapes
+                        pass
                 else:
                     raise PermissionError
                 if continuer == 'o':

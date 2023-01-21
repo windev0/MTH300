@@ -71,20 +71,31 @@ def moindre_carree(x,y):
     y_new = ahat + bhat * x
     return y_new
 # ===============================================================================================
-def vandermone(x, y):
-    M = np.vstack()
+def vandermone(x_values, y_values):
+    
+    # Create the Vandermonde matrix
+    n = len(x_values)
+    V = np.array([x_values**(n-1-i) for i in range(n)]).T
+
+    # Solve for the polynomial coefficients using the Vandermonde matrix
+    coefficients = np.linalg.solve(V, y_values)
+    
+    return coefficients
+        
 x = np.array([0, 20, 40, 60, 80, 100])
 y = np.array([26.0, 48.0, 61.6, 71.2, 74.8, 75.2], float)
 xplt, yplt = lagrange(x, y)
 x_new = np.linspace(x[0], x[-1], 50)
 p = interpolation_newton(x,y,x_new)
 
+
+
 # courbe
 plt.plot(x, y, 'yo', label= 'Courbe principale')
 plt.plot(xplt, yplt, 'r--', label= "Lagrange")
 plt.plot(x_new, p, 'b.', label= 'Newton')
 plt.plot(x, moindre_carree(x,y), 'b-', label= 'Moindre carree')
-plt.plot([-1, 1, 2, 3], [-12, -14, -18, -8], 'ro', label='vendermone')
+# plt.plot(x, vandermone(x, y), 'ro', label='vendermone')
 plt.legend()
 plt.title('INTERPOLATION')
 plt.xlabel('x')
