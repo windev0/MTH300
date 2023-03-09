@@ -1,7 +1,9 @@
 import numpy as np
+f = lambda x : (x**2-1)/(x**2+1)
 
+print(f(-4), f(-3), f(-2), f(-1), f(0), f(1), f(2), (3), f(4))
 
-# Définir les coefficients du système d'équations linéaires sous forme de matrice augmentée
+"""# Définir les coefficients du système d'équations linéaires sous forme de matrice augmentée
 A = np.array([[-1, 1, 2],[1, -1, 3],[0, 1, 1]])
 B = np.array([2,3,2])
 
@@ -27,7 +29,7 @@ for i in range(n):
 x = AB[:, -1]
 
 print("La solution du système d'équations linéaires est:", x)
-print(np.linalg.solve(A, B))
+print(np.linalg.solve(A, B))"""
 
 
 # Print the polynomial equation

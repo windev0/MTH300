@@ -83,7 +83,7 @@ def vandermone(x_values, y_values):
     return coefficients
         
 x = np.array([-2, -1, 0, 1, 2])
-y = np.array([-25.0, -7.0, -1.0, -1.0, -1.0], float)
+y = np.array([3/5, 0, -1, 0, 3/5], float)
 xplt, yplt = lagrange(x, y)
 x_new = np.linspace(x[0], x[-1], 50)
 p = interpolation_newton(x,y,x_new)
@@ -91,10 +91,13 @@ p = interpolation_newton(x,y,x_new)
 
 
 # courbe
-plt.plot(x, y, 'yo', label= 'Courbe principale')
+plt.plot(x, y, 'go', label= 'Courbe principale')
+# plt.plot([-4,-3, -2, -1, 0, 1, 2, 3, 4], [0.8823529411764706,0.8,0.6,0.0,-1.0, 0.0, 0.6, 3,0.882352941176470], 'go', label= 'Courbe principale')
 plt.plot(xplt, yplt, 'r--', label= "Lagrange")
 plt.plot(x_new, p, 'b.', label= 'Newton')
-plt.plot(x, moindre_carree(x,y), 'b-', label= 'Moindre carree')
+# plt.plot(x, moindre_carree(x,y), 'b-', label= 'Moindre carree')
+plt.plot(x, y, 'b-', label= 'Moindre carree')
+
 # plt.plot(x, vandermone(x, y), 'ro', label='vendermone')
 plt.legend()
 plt.title('INTERPOLATION')

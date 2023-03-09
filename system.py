@@ -104,8 +104,8 @@ def Gauss_elimination(A, B):
         Aw[:, n] = B                    # la derniere colonne est le vecteur B 
         sol = np.zeros(n)               # la solution est un vecteur de dimension le nb de ligne de A que la matrice A
         
-        if Aw == None:
-            sys.exit()
+        # if Aw == None:
+        #     sys.exit()
             
         # echelonnement
         # boucle en i(pivots) de 1 a n-1 <==> 0, 1, 2, ..., n-2 (ici n-1 a cause de arrage)
@@ -334,7 +334,7 @@ def jacobi(A, b, nmax = 100, tol = 1e-5):
         print("\n\tERREUR: Une erreur s'est produite, réessayez avec d'autres données !")
         sys.exit('Fin du programme')
 # ===========================================================================================
-def gauss_seidel(A, b, x = [0, 0, 0], max_iter=100, tol=1e-5):
+def gauss_seidel(A, b, x = [0, 0, 0, 0], max_iter=100, tol=1e-5):
     try:
         # verifier si la matrice A est carrée
         m, n, p = np.shape(A)[0], np.shape(A)[1], len(b)   # respectivemnt nb de lignes et de colonnes
@@ -453,11 +453,11 @@ if __name__ == "__main__":
     print('\n========================== E Q U A T I O N   D U  T Y P E   A * X  =  B ==========================')
 
     # SAISIE DES MATRICES
-    A = np.array([[-1, 1, 2],[1, -1, 3],[0, 1, 1]])
-    b = np.array([2,3,2])
+    # A = np.array([[-1, 1, 2],[1, -1, 3],[0, 1, 1]])
+    # b = np.array([2,3,2])
     
-    # A = np.array([[4, 1, 1],[1, 4, 1],[1, 1, 4]])
-    # b = np.array([3, -3, 0])
+    A = np.array([[7, 1, 2, 3],[1, 7, 2, 3],[1, 2, 7, 3],[1, 2, 3, 7]])
+    b = np.array([5,-7,3,-5])
     
     # A = np.array([[1, 4, -3],[2, -3, -1],[3, 2, 1]])
     # b = np.array([1, 2, 3])
@@ -468,11 +468,11 @@ if __name__ == "__main__":
         valide = True
         while continuer == 'o':
             
-            A = np.array([[-1, 1, 2],[1, -1, 3],[0, 1, 1]])
-            b = np.array([2,3,2])
+            # A = np.array([[-1, 1, 2],[1, -1, 3],[0, 1, 1]])
+            # b = np.array([2,3,2])
             
-            # A = np.array([[4, 1, 1],[1, 4, 1],[1, 1, 4]])
-            # b = np.array([3, -3, 0])
+            A = np.array([[7, 1, 2, 3],[1, 7, 2, 3],[1, 2, 7, 3],[1, 2, 3, 7]])
+            b = np.array([5,-7,3,-5])
             
             # A = np.array([[1, 4, -3],[2, -3, -1],[3, 2, 1]])
             # b = np.array([1, 2, 3])
@@ -502,15 +502,15 @@ if __name__ == "__main__":
                         print("\n\t================ M E T H O D E   D E   G A U S S - J O R D A N ================")
                         x, newA = Gauss_jordanV2(A,b)
                         print("\nA = \n", newA)
-                        print("\nX = \n", x)
-                        # print("\nX = \n", np.linalg.solve(A, b))
+                        print("\nX = ", x)
+                        # print("\nX = ", np.linalg.solve(A, b))
                     elif choix == 3:
                         print("\n\t================ M E T H O D E   L U   ( D O O L I T E ) ================")
                         L, U, y, x = doolittle(A, b)
                         print("\nL = \n", L)
                         print("\nU = \n", U)
-                        print("\nY = \n", y)
-                        print("\nX = \n", x)
+                        print("\nY = ", y)
+                        print("\nX = ", x)
                         # print("\nX = \n", np.linalg.solve(A, b))
                     elif choix == 4:
                         print("\n\t================ M E T H O D E   L U   ( C R O U T ) ================")
@@ -535,7 +535,7 @@ if __name__ == "__main__":
                     elif choix == 7:
                         print("\n\t================ M E T H O D E    D E   G A U S S - S E I D E L  ================")
                         print("\nX = \n", gauss_seidel(A, b))
-                        print("\nX = \n", np.linalg.solve(A, b))
+                        # print("\nX = \n", np.linalg.solve(A, b))
                     elif choix == 8:
                         print("\n\t================ M E T H O D E    D E   T H O M A S  ================")
                         print("\nX = \n", resolveThomas(A,b))

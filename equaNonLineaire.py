@@ -19,8 +19,8 @@ def effacer_console():
 #---------------------------------------------------------------------------------------------
 def saisie_bornes():
     try:
-        x1 = int(input("\n\tVeuillez saisir la borne inférieure X1 = "))
-        x2 = int(input("\n\tVeuillez saisir la borne supérieure X2 = "))
+        x1 = float(input("\n\tVeuillez saisir la borne inférieure X1 = "))
+        x2 = float(input("\n\tVeuillez saisir la borne supérieure X2 = "))
         assert x1 < x2
         if x1 < x2:
             return x1, x2
@@ -70,7 +70,7 @@ def convergence(x1, x2, e, nb, xm = 1):
     except NameError or TypeError:
         print("\n\tERREUR: Fonction f(x) non valide !")
         sys.exit()"""
-f = lambda x : (x**2 - 1 )*(x-2)
+f = lambda x : 4*(x**3)-2*(x**2)+x-3
 # f = lambda x : (x-1-10e-10 )*(x-1-2*10e-10)*(x-1-3*10e-10)
 
     # return x**3 + x**2 - 3*x - 3
@@ -85,9 +85,9 @@ f = lambda x : (x**2 - 1 )*(x-2)
     except NameError or TypeError:
         print("\n\tERREUR: Fonction g(x) non valide !")
         sys.exit()"""
-g = lambda x : (x**3 - 2*(x**2) + 2)
+g = lambda x : -4*(x**3)+2*(x**2)+3
 #---------------------------------------------------------------------------------------------
-devf = lambda x : 3*(x**2) - 4*x - 1
+devf = lambda x : 12*(x**2)-4*x+1
 # devf = lambda x : 1
 
     # reperesente la fonction derivee 
