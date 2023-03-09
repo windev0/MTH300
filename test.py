@@ -1,22 +1,39 @@
 import numpy as np
 
-# Define the x and y values of the data points
-x_values = np.array([1, 2, 3, 4])
-y_values = np.array([2, 4, 8, 16])
 
-# Create the Vandermonde matrix
-n = len(x_values)
-V = np.array([x_values**(n-1-i) for i in range(n)]).T
+# Définir les coefficients du système d'équations linéaires sous forme de matrice augmentée
+A = np.array([[-1, 1, 2],[1, -1, 3],[0, 1, 1]])
+B = np.array([2,3,2])
 
-print(V)
+# Concaténer la matrice A et le vecteur B en une seule matrice augmentée
+AB = np.column_stack((A, B))
 
-# Solve for the polynomial coefficients using the Vandermonde matrix
-coefficients = np.linalg.solve(V, y_values)
+# Trouver la taille de la matrice augmentée
+n, m = AB.shape
+
+# Appliquer la méthode de Gauss-Jordan
+for i in range(n):
+    # Diviser la i-ème ligne par l'élément diagonal
+    div = AB[i, i]
+    AB[i, :] /= div
+    
+    # Soustraire la i-ème ligne multipliée par l'élément non diagonal des autres lignes
+    for j in range(n):
+        if i != j:
+            mult = AB[j, i]
+            AB[j, :] -= mult * AB[i, :]
+            
+# Extraire la solution x à partir de la dernière colonne de la matrice augmentée
+x = AB[:, -1]
+
+print("La solution du système d'équations linéaires est:", x)
+print(np.linalg.solve(A, B))
+
 
 # Print the polynomial equation
-print("Polynomial equation:")
+"""print("Polynomial equation:")
 for i, c in enumerate(coefficients):
-    print(f"{c}x^{i}", end=" + ")
+    print(f"{c}x^{i}", end=" + ")"""
 
 """A = np.array([
     [0, 1, 1, 0, 0, 0, 1, 0, 0, 1],

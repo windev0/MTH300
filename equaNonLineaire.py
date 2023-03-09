@@ -66,11 +66,13 @@ def convergence(x1, x2, e, nb, xm = 1):
 #---------------------------------------------------------------------------------------------
 """def f(x):
     try:
-        return a*x + b
+        return TIMIWE * x + NTARE
     except NameError or TypeError:
         print("\n\tERREUR: Fonction f(x) non valide !")
         sys.exit()"""
-f = lambda x : exp(-x) - x
+f = lambda x : (x**2 - 1 )*(x-2)
+# f = lambda x : (x-1-10e-10 )*(x-1-2*10e-10)*(x-1-3*10e-10)
+
     # return x**3 + x**2 - 3*x - 3
     # return pow(x,2) - 2
     # return sqrt(2*x + 3)
@@ -79,13 +81,15 @@ f = lambda x : exp(-x) - x
 #---------------------------------------------------------------------------------------------
 """def g(x):
     try:
-        return a*x + b
+        return IMIWE * x + NTARE
     except NameError or TypeError:
         print("\n\tERREUR: Fonction g(x) non valide !")
         sys.exit()"""
-g = lambda x : exp(-x) 
+g = lambda x : (x**3 - 2*(x**2) + 2)
 #---------------------------------------------------------------------------------------------
-devf = lambda x : -exp(-x) - 1
+devf = lambda x : 3*(x**2) - 4*x - 1
+# devf = lambda x : 1
+
     # reperesente la fonction derivee 
 #---------------------------------------------------------------------------------------------
 # permet de tronquer un nombre nb a un m chiffres apres la virgule
@@ -219,7 +223,7 @@ def dichotomie():
                     e = saisie_tolerance()   # saisie du critère d'arret et le nb max d'itération
                     N = calcul_N(x1, x2, e)  # calcul du nb max d'iteration a l'aide de la tolerance
                     i = 1
-                    while (not (convergence(x1, x2, e, 1, xm))) and i < N and f(x1)*f(x2) < 0:
+                    while (not (convergence(x1, x2, e, 1, xm))) and i <= N and f(x1)*f(x2) < 0:
                         if f(x1)*f(xm) < 0:
                             x2 = xm             # changement de la borne supérieure
                         if f(xm)*f(x2) < 0:
@@ -233,7 +237,7 @@ def dichotomie():
                         print("\tConvergence atteinte en", i, 'itérations')
                     # Saisie des résultats
                     print("\n\t X1 = {}\t\t\t X2 = {}\t\t\t Xm = {}\n\t f(X1) = {}\t\t f(X2) = {}\t\t f(Xm) = {}".format(\
-                    tronquer(x1, 6), tronquer(x2, 6), tronquer(xm, 6), tronquer(f(x1), 6), tronquer(f(x2), 6), tronquer(f(xm), 6)))
+                    x1, x2, xm, f(x1), f(x2), f(xm)))
                 print('-------------------------------------------------------------------------------------------')
             else:
                 print("\n\tla fonction ne change pas de signe sur l'intervalle [{},{}]".format(x1, x2))
@@ -305,10 +309,10 @@ if __name__ == '__main__':
                         else:
                             valide = True
                         
-            except PermissionError or TypeError or NameError :
+            except PermissionError or TypeError or NameError or ValueError :
                 print("\nChoix invalide !")
-            except ValueError:
-                print("\nChoix invalide !")
+           
+           
                 
             # effacer_console() # on rend au propre la console
     else:

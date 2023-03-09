@@ -82,8 +82,8 @@ def vandermone(x_values, y_values):
     
     return coefficients
         
-x = np.array([0, 20, 40, 60, 80, 100])
-y = np.array([26.0, 48.0, 61.6, 71.2, 74.8, 75.2], float)
+x = np.array([-2, -1, 0, 1, 2])
+y = np.array([-25.0, -7.0, -1.0, -1.0, -1.0], float)
 xplt, yplt = lagrange(x, y)
 x_new = np.linspace(x[0], x[-1], 50)
 p = interpolation_newton(x,y,x_new)

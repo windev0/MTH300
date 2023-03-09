@@ -104,6 +104,9 @@ def Gauss_elimination(A, B):
         Aw[:, n] = B                    # la derniere colonne est le vecteur B 
         sol = np.zeros(n)               # la solution est un vecteur de dimension le nb de ligne de A que la matrice A
         
+        if Aw == None:
+            sys.exit()
+            
         # echelonnement
         # boucle en i(pivots) de 1 a n-1 <==> 0, 1, 2, ..., n-2 (ici n-1 a cause de arrage)
         for i in np.arange(0, n-1):    
@@ -449,13 +452,15 @@ if __name__ == "__main__":
     print('\n')
     print('\n========================== E Q U A T I O N   D U  T Y P E   A * X  =  B ==========================')
 
-    # SAISI DES MATRICES
-    A = np.array([[4, 1, 1],[1, 5, 2],[1, 2, 6]])
-    # A = np.array([[5, 8, 0, 0], [2, 6, 9, 0], [0, 3, 7, 10], [0, 0, 4, 4]])
-    # b = np.array([11, 12, 13])
-    b = np.array([7,-21,15])
-    # A = np.array([[1, 2, 3],[2, 3, 1],[1, 1, -2]])
-    # b = np.array([6, 6, 0])
+    # SAISIE DES MATRICES
+    A = np.array([[-1, 1, 2],[1, -1, 3],[0, 1, 1]])
+    b = np.array([2,3,2])
+    
+    # A = np.array([[4, 1, 1],[1, 4, 1],[1, 1, 4]])
+    # b = np.array([3, -3, 0])
+    
+    # A = np.array([[1, 4, -3],[2, -3, -1],[3, 2, 1]])
+    # b = np.array([1, 2, 3])
     
     if int(np.linalg.det(A)) != 0: # cas ou la matrice est inversible
 
@@ -463,12 +468,14 @@ if __name__ == "__main__":
         valide = True
         while continuer == 'o':
             
-            A = np.array([[4, 1, 1],[1, 5, 2],[1, 2, 6]])
-            # A = np.array([[5, 8, 0, 0], [2, 6, 9, 0], [0, 3, 7, 10], [0, 0, 4, 4]])
-            # b = np.array([11, 12, 13, 14])
-            b = np.array([7,-21,15])
-            # A = np.array([[1, 2, 3],[2, 3, 1],[1, 1, -2]])
-            # b = np.array([6, 6, 0])
+            A = np.array([[-1, 1, 2],[1, -1, 3],[0, 1, 1]])
+            b = np.array([2,3,2])
+            
+            # A = np.array([[4, 1, 1],[1, 4, 1],[1, 1, 4]])
+            # b = np.array([3, -3, 0])
+            
+            # A = np.array([[1, 4, -3],[2, -3, -1],[3, 2, 1]])
+            # b = np.array([1, 2, 3])
             
             # affichage du menu
             print("\n\t M E N U ")
@@ -490,11 +497,13 @@ if __name__ == "__main__":
                     if choix == 1:
                         print("\n\t================ M E T H O D E   D E   G A U S S ================")
                         print("\nX = \n", Gauss_elimination(A, b))
+                        # print("\nX = \n", np.linalg.solve(A, b))
                     elif choix == 2:
                         print("\n\t================ M E T H O D E   D E   G A U S S - J O R D A N ================")
                         x, newA = Gauss_jordanV2(A,b)
                         print("\nA = \n", newA)
                         print("\nX = \n", x)
+                        # print("\nX = \n", np.linalg.solve(A, b))
                     elif choix == 3:
                         print("\n\t================ M E T H O D E   L U   ( D O O L I T E ) ================")
                         L, U, y, x = doolittle(A, b)
@@ -502,6 +511,7 @@ if __name__ == "__main__":
                         print("\nU = \n", U)
                         print("\nY = \n", y)
                         print("\nX = \n", x)
+                        # print("\nX = \n", np.linalg.solve(A, b))
                     elif choix == 4:
                         print("\n\t================ M E T H O D E   L U   ( C R O U T ) ================")
                         L, U, y, x = crout(A, b)
@@ -509,6 +519,7 @@ if __name__ == "__main__":
                         print("\nU = \n", U)
                         print("\nY = \n", y)
                         print("\nX = \n", x)
+                        # print("\nX = \n", np.linalg.solve(A, b))
                     elif choix == 5:
                         print("\n\t================ M E T H O D E   L U   ( C H O L E S K Y ) ================")
                         L, transposedL, y, x = cholesky(A, b)
@@ -516,16 +527,20 @@ if __name__ == "__main__":
                         print("\ntranspL = \n", transposedL)
                         print("\nY = \n", y)
                         print("\nX = \n", x)
+                        print("\nX = \n", np.linalg.solve(A, b))
                     elif choix == 6:
                         print("\n\t================ M E T H O D E    D E   J A C O B I  ================")
                         print("\nX = \n", jacobi(A, b))
+                        # print("\nX = \n", np.linalg.solve(A, b))
                     elif choix == 7:
                         print("\n\t================ M E T H O D E    D E   G A U S S - S E I D E L  ================")
                         print("\nX = \n", gauss_seidel(A, b))
+                        print("\nX = \n", np.linalg.solve(A, b))
                     elif choix == 8:
                         print("\n\t================ M E T H O D E    D E   T H O M A S  ================")
                         print("\nX = \n", resolveThomas(A,b))
                         # print("\nX = \n", thomas(A,b))
+                        # print("\nX = \n", np.linalg.solve(A, b))
                     elif choix == 9:
                         continuer = 'n'
                     else:
